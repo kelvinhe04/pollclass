@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brutal-bg: #F5F5F0;
+  --brutal-surface: #FFFFFF;
+  --brutal-text: #1A1A1A;
+  --brutal-text-muted: #666666;
+  --brutal-border: #1A1A1A;
+  --brutal-accent: #FF5722;
+  --brutal-success: #4CAF50;
+  --brutal-danger: #E53935;
+  --brutal-warning: #FFC107;
+  --brutal-code: #2962FF;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--brutal-bg);
+  color: var(--brutal-text);
+  line-height: 1.5;
+}
+
+@layer components {
+  .brutal-card {
+    @apply bg-white border-2 border-black p-6;
+    box-shadow: 6px 6px 0px 0px #1A1A1A;
+  }
+
+  .brutal-input {
+    @apply w-full px-4 py-3 bg-white border-2 border-black focus:outline-none transition-all;
+  }
+
+  .brutal-input:focus {
+    transform: translateX(2px) translateY(2px);
+    box-shadow: 4px 4px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn {
+    @apply px-6 py-3 border-2 border-black font-bold uppercase tracking-wide text-sm transition-all;
+  }
+
+  .brutal-btn-primary {
+    @apply brutal-btn bg-black text-white;
+    box-shadow: 6px 6px 0px 0px #1A1A1A;
+  }
+
+.brutal-btn-primary:hover:not(:disabled) {
+    @apply bg-gray-900;
+    transform: translateX(2px) translateY(2px);
+    box-shadow: 4px 4px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-primary:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    box-shadow: 6px 6px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-secondary:hover:not(:disabled) {
+    @apply bg-gray-100;
+    transform: translateX(2px) translateY(2px);
+    box-shadow: 2px 2px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-secondary:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .brutal-btn-danger:hover:not(:disabled) {
+    @apply bg-red-700;
+    transform: translateX(2px) translateY(2px);
+    box-shadow: 2px 2px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-danger:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .brutal-btn-success:hover:not(:disabled) {
+    @apply bg-green-700;
+    transform: translateX(2px) translateY(2px);
+    box-shadow: 2px 2px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-success:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .brutal-btn-secondary {
+    @apply brutal-btn bg-white text-black;
+    box-shadow: 3px 3px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-secondary:hover {
+    @apply bg-gray-100;
+    transform: translateX(2px) translateY(2px);
+    box-shadow: 2px 2px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-danger {
+    @apply brutal-btn bg-red-600 text-white;
+    box-shadow: 3px 3px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-danger:hover {
+    @apply bg-red-700;
+    transform: translateX(2px) translateY(2px);
+    box-shadow: 2px 2px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-success {
+    @apply brutal-btn bg-green-600 text-white;
+    box-shadow: 3px 3px 0px 0px #1A1A1A;
+  }
+
+  .brutal-btn-success:hover {
+    @apply bg-green-700;
+    transform: translateX(2px) translateY(2px);
+    box-shadow: 2px 2px 0px 0px #1A1A1A;
+  }
+
+  .brutal-title {
+    @apply text-3xl font-bold tracking-tight;
+  }
+
+  .brutal-title-lg {
+    @apply text-4xl font-bold tracking-tight;
+  }
+
+  .brutal-label {
+    @apply block text-sm font-bold uppercase tracking-wide mb-2;
+  }
+
+  .brutal-badge {
+    @apply inline-block px-3 py-1 text-xs font-bold uppercase tracking-wide border-2 border-black;
+  }
+
+  .brutal-badge-success {
+    @apply brutal-badge bg-green-600 text-white;
+  }
+
+  .brutal-badge-danger {
+    @apply brutal-badge bg-red-600 text-white;
+  }
+
+  .brutal-badge-warning {
+    @apply brutal-badge bg-yellow-400 text-black;
+  }
+
+  .code-display {
+    @apply font-mono text-4xl font-bold tracking-widest bg-yellow-400 px-4 py-2 border-2 border-black inline-block;
+  }
+}
