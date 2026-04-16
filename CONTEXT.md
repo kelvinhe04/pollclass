@@ -1,42 +1,53 @@
-# PollClass - Technical Context Document
+# PollClass - Documento de Contexto Técnico
 
-## 1. Project Overview
+## 1. Visión General del Proyecto
 
-**PollClass** is a real-time in-class polling web application.
+**PollClass** es una aplicación web de encuestas en tiempo real para el aula.
 
-**Purpose**: Allow professors to create live polls in the classroom. Students join with a 6-character alphanumeric code and vote from their phones. Both parties view real-time results via HTTP polling (NOT WebSockets).
+**Propósito**: Permitir a los profesores crear encuestas en vivo en el aula. Los estudiantes se unen con un código alfanumérico de 6 caracteres y votan desde sus teléfonos. Ambas partes ven los resultados en tiempo real mediante HTTP polling (SIN WebSockets).
 
-**Core Flow**:
-- **Professor**: Login → Create poll → Get shareable code → See live results → Close poll
-- **Student**: Login → Enter code → Vote → See results updated via polling
+**Flujo Principal**:
+- **Profesor**: Iniciar sesión → Crear encuesta → Obtener código compartido → Ver resultados en vivo → Cerrar encuesta
+- **Estudiante**: Iniciar sesión → Ingresar código → Votar → Ver resultados actualizados mediante polling
 
-Both user types must authenticate with email/password. The role is chosen ONCE at the landing, and preserved throughout all subsequent screens without re-selecting.
+Ambos tipos de usuarios deben autenticarse con email/contraseña. El rol se elige UNA SOLA VEZ en la página de inicio, y se mantiene en todas las pantallas subsiguientes sin volver a seleccionar.
 
 ---
 
-## 2. Technology Stack
+## 2. Stack de Tecnologías
 
-| Layer | Technology |
-|-------|------------|
+| Capa | Tecnología |
+|------|------------|
 | **Frontend** | React 18 (Vite), Tailwind CSS, Recharts |
 | **Backend** | Bun runtime, Hono framework (TypeScript) |
-| **Database** | MongoDB + Mongoose ODM |
-| **Authentication** | JWT (jsonwebtoken) + bcryptjs |
-| **HTTP Comm** | Native fetch API (no Axios) |
-| **Real-time** | HTTP polling only (NOT WebSockets/SSE) |
+| **Base de datos** | MongoDB + Mongoose ODM |
+| **Autenticación** | JWT (jsonwebtoken) + bcryptjs |
+| **Comunicación HTTP** | Fetch API nativo (sin Axios) |
+| **Tiempo real** | Solo HTTP polling (SIN WebSockets/SSE) |
 
 ---
 
-## 3. Project Structure
+## 3. Estructura del Proyecto
 
 ```
 pollclass/
 ├── CONTEXT.md                    # Documentación técnica del proyecto
+├── PLAYWRIGHT.md                # Documentación de tests E2E
 ├── package.json                  # Scripts: npm run dev / bun run dev
+├── playwright.config.js         # Configuración de Playwright
+├── tests/                       # Tests E2E
+│   ├── config.js                # Datos compartidos
+│   ├── pollCode.js              # Código del poll
+│   ├── 01-registro-profesor.spec.js
+│   ├── 02-crear-encuesta.spec.js
+│   ├── 03-registro-estudiante.spec.js
+│   └── 04-votar.spec.js
+├── screenshots/                  # Capturas de test
+├── videos/                     # Videos de test
 ├── client/                       # React + Vite + Tailwind
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── design/            # Brutalist Button, Card, Input
+│   │   │   ├── design/            # Button, Card, Input estilo Brutalist
 │   │   │   ├── ConfirmModal.jsx  # Modal de confirmación brutalist
 │   │   │   ├── JoinPoll.jsx
 │   │   │   ├── PollCard.jsx
@@ -50,10 +61,10 @@ pollclass/
 │   │   │   ├── Landing.jsx
 │   │   │   ├── LoginProfessor.jsx
 │   │   │   ├── LoginStudent.jsx
-│   │   │   ├── RegisterProfessor.jsx
-│   │   │   ├── RegisterStudent.jsx
-│   │   │   ├── Professor.jsx
-│   │   │   ├── ProfessorPoll.jsx
+│   │   │   , RegisterProfessor.jsx
+│   │   │   , RegisterStudent.jsx
+│   │   │   , Professor.jsx
+│   │   │   , ProfessorPoll.jsx
 │   │   │   └── Student.jsx
 │   │   ├── services/
 │   │   │   └── api.js
@@ -65,7 +76,7 @@ pollclass/
 │   └── vite.config.js
 ├── server/                     # Bun + Hono + Mongoose
 │   ├── src/
-│   │   └── index.ts           # Server entry point
+│   │   └── index.ts           # Entry point del servidor
 │   ├── models/
 │   │   ├── User.ts
 │   │   ├── Poll.ts
@@ -90,12 +101,12 @@ pollclass/
 
 ---
 
-## 4. Backend State
+## 4. Estado del Backend
 
-### Models
+### Modelos
 
 **User** (`server/models/User.ts`)
-- `email` (unique, lowercase)
+- `email` (único, minúsculas)
 - `passwordHash` (bcrypt)
 - `name`
 - `role` (enum: 'professor' | 'student')
@@ -105,172 +116,173 @@ pollclass/
 - `title`
 - `options` (array: { text, votes })
 - `status` (enum: 'active' | 'closed')
-- `code` (unique, 6 chars uppercase)
-- `professorId` (ref to User)
+- `code` (único, 6 caracteres mayúsculas)
+- `professorId` (ref a User)
 - `createdAt`, `closedAt`
 
 **Vote** (`server/models/Vote.ts`)
-- `pollId` (ref to Poll)
+- `pollId` (ref a Poll)
 - `optionIndex`
-- `studentId` (ref to User)
+- `studentId` (ref a User)
 - `voterName`
 - `createdAt`
 
-### Routes & Endpoints
+### Rutas y Endpoints
 
 **Auth** (`/api/auth`)
-| Method | Endpoint | Description |
+| Método | Endpoint | Descripción |
 |-------|-----------|-------------|
-| POST | `/register` | Create user (email, password, name, role) |
-| POST | `/login` | Login (email, password) → JWT |
-| GET | `/me` | Get current user (protected) |
+| POST | `/register` | Crear usuario (email, password, name, role) |
+| POST | `/login` | Iniciar sesión (email, password) → JWT |
+| GET | `/me` | Obtener usuario actual (protegido) |
 
-**Polls** (`/api/polls`) - All protected, require JWT
-| Method | Endpoint | Description |
+**Polls** (`/api/polls`) - Todos protegidos, requieren JWT
+| Método | Endpoint | Descripción |
 |-------|-----------|-------------|
-| POST | `/` | Create poll (professor only) |
-| GET | `/` | Get professor's polls |
-| GET | `/code/:code` | Get poll by code (public) |
-| GET | `/:id/for-student` | Get poll for student (with vote status) |
-| GET | `/:id` | Get poll by ID (with existingVote for student) |
-| PATCH | `/:id/close` | Close poll (owner only) |
-| DELETE | `/:id` | Delete poll (owner only) |
+| POST | `/` | Crear encuesta (solo profesor) |
+| GET | `/` | Obtener encuestas del profesor |
+| GET | `/code/:code` | Obtener encuesta por código (público) |
+| GET | `/:id/for-student` | Obtener encuesta para estudiante (con estado de voto) |
+| GET | `/:id` | Obtener encuesta por ID (con existingVote para estudiante) |
+| PATCH | `/:id/close` | Cerrar encuesta (solo propietario) |
+| DELETE | `/:id` | Eliminar encuesta (solo propietario) |
 
 **Votes** (`/api/polls/:pollId`)
-| Method | Endpoint | Description |
+| Método | Endpoint | Descripción |
 |-------|-----------|-------------|
-| POST | `/vote` | Submit vote (student only) |
-| GET | `/results` | Get poll results with vote list |
+| POST | `/vote` | Emitir voto (solo estudiante) |
+| GET | `/results` | Obtener resultados de encuesta con lista de votos |
 
 ### Middleware
 
-- `auth.ts`: JWT verify, generateToken, requireRole
-- `errorHandler.ts`: Global error catch
+- `auth.ts`: Verificación JWT, generateToken, requireRole
+- `errorHandler.ts`: Captura global de errores
 
-### Key Validations
+### Validaciones Clave
 
-- Professor can only see/manage their own polls
-- One vote per student per poll (unique: pollId + studentId)
-- Poll closes prevent new votes
-- Student attempting to vote on professor dashboard is blocked (role check)
+- El profesor solo puede ver/gestionar sus propias encuestas
+- Un voto por estudiante por encuesta (único: pollId + studentId)
+- Cerrar encuestas impide nuevos votos
+- Estudiante intentando votar en dashboard de profesor es bloqueado (verificación de rol)
 
 ---
 
-## 5. Frontend State
+## 5. Estado del Frontend
 
-### Pages
+### Páginas
 
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/` | Landing.jsx | Landing with "Soy Profesor" → /professor/login, "Soy Estudiante" → /student/login |
-| `/professor/login` | LoginProfessor.jsx | Professor login |
-| `/professor/register` | RegisterProfessor.jsx | Professor register (no role selector) |
-| `/student/login` | LoginStudent.jsx | Student login |
-| `/student/register` | RegisterStudent.jsx | Student register (no role selector) |
-| `/dashboard` | Professor.jsx | Professor dashboard - create & manage polls |
-| `/dashboard/poll/:id` | ProfessorPoll.jsx | Poll results with voters list |
-| `/student` | Student.jsx | Student voting interface |
+| Ruta | Componente | Descripción |
+|-----|-----------|-------------|
+| `/` | Landing.jsx | Landing con "Soy Profesor" → /professor/login, "Soy Estudiante" → /student/login |
+| `/professor/login` | LoginProfessor.jsx | Login de profesor |
+| `/professor/register` | RegisterProfessor.jsx | Registro de profesor (sin selector de rol) |
+| `/student/login` | LoginStudent.jsx | Login de estudiante |
+| `/student/register` | RegisterStudent.jsx | Registro de estudiante (sin selector de rol) |
+| `/dashboard` | Professor.jsx | Dashboard profesor - crear y gestionar encuestas |
+| `/dashboard/poll/:id` | ProfessorPoll.jsx | Resultados de encuesta con lista de votantes |
+| `/student` | Student.jsx | Interfaz de votación para estudiante |
 
-### Authentication Flow
+### Flujo de Autenticación
 
-1. User logs in via `/professor/login` or `/student/login`
-2. Backend returns `{ user, token }`
-3. Frontend stores token & user in localStorage via AuthContext
-4. All protected API calls include `Authorization: Bearer <token>`
-5. ProtectedRoute component guards pages by role
+1. Usuario inicia sesión vía `/professor/login` o `/student/login`
+2. Backend devuelve `{ user, token }`
+3. Frontend guarda token y usuario en localStorage via AuthContext
+4. Todas las llamadas API protegidas incluyen `Authorization: Bearer <token>`
+5. Componente ProtectedRoute protege páginas por rol
 
-### Key Components
+### Componentes Clave
 
-- **PollResults.jsx**: Displays poll title, code (large, copyable), bar chart, vote summary, AND voters table (voterName, optionText, formattedAt)
-- **ProtectedRoute.jsx**: Redirects unauthenticated users, enforces role-based access
-- **AuthContext.jsx**: Global auth state, login/register/logout methods
+- **PollResults.jsx**: Muestra título de encuesta, código (grande, copiable), gráfico de barras, resumen de votos, Y tabla de votantes (voterName, optionText, formattedAt)
+- **ProtectedRoute.jsx**: Redirige usuarios no autenticados, aplica acceso basado en rol
+- **AuthContext.jsx**: Estado global de auth, métodos login/register/logout
 
 ### Polling
 
-- Professor results: 3-second interval (setInterval in ProfessorPoll.jsx)
-- Student results: 5-second interval (setInterval in Student.jsx)
-- Both use useEffect cleanup to clear intervals
+- Resultados del profesor: intervalo de 3 segundos (setInterval en ProfessorPoll.jsx)
+- Resultados del estudiante: intervalo de 5 segundos (setInterval en Student.jsx)
+- Ambos usan cleanup de useEffect para limpiar intervalos
 
 ---
 
-## 6. Design/UX Decisions (Already Made)
+## 6. Decisiones de Diseño/UX (Ya Definidas)
 
-- **Brutalist UI**: Thick borders (2-4px), solid shadows, no border-radius, high contrast
-- **Role separation**: Professor and student flows are completely separate screens - no role selector on login/register
-- **Single role choice**: User chooses professor/student ONCE on landing page, never asked again
-- **Authenticated voting**: Students vote with their authenticated account, voterName comes from user.name
-- **Voters visibility**: Professor sees full list of voters (name, option, time) in results
-- **One vote per student**: Blocked server-side with 409 error if student tries to vote twice
-- **Code display**: Large monospace yellow background for visibility, copy button included
-
----
-
-## 7. What's Done
-
-- [x] Full authentication system (register, login, JWT, protected routes)
-- [x] Role-based access control (professor vs student)
-- [x] Poll CRUD operations (create, read, close, delete)
-- [x] Vote submission with validation
-- [x] Real-time results via HTTP polling (both dashboard views)
-- [x] Voters list visibility in professor results
-- [x] Separated login/register flows by role
-- [x] Brutalist design system with reusable components
+- **UI Brutalist**: Bordes gruesos (2-4px), sombras sólidas, sin border-radius, alto contraste
+- **Separación de roles**: Flujos de profesor y estudiante en pantallas completamente separadas - sin selector de rol en login/registro
+- **Elección única de rol**: Usuario elige profesor/estudiante UNA SOLA VEZ en página de inicio, nunca más
+- **Votación autenticada**: Estudiantes votan con su cuenta autenticada, voterName viene de user.name
+- **Visibilidad de votantes**: Profesor ve lista completa de votantes (nombre, opción, hora) en resultados
+- **Un voto por estudiante**: Bloqueado del lado del servidor con error 409 si estudiante intenta votar dos veces
+- **Visualización del código**: Fondo amarillo grande en monospace para visibilidad, botón de copiar incluido
 
 ---
 
-## 8. What's Pending
+## 7. Qué está Hecho
 
-- [ ] No critical pending items
-- [ ] Potentially: README updates for new auth flow
-- [ ] Potentially: Environment variable documentation for local network access
-
----
-
-## 9. Known Issues / Notes
-
-- Backend runs on port 3001, frontend on 5173
-- MongoDB must be running locally (mongodb://localhost:27017/pollclass)
-- Frontend .env needs `VITE_API_BASE_URL=http://<LOCAL_IP>:3001` for mobile testing
-- No WebSockets - polling only for real-time updates
-- Legacy routes (/professor/*, /student-old) redirect to new paths
+- [x] Sistema completo de autenticación (registro, login, JWT, rutas protegidas)
+- [x] Control de acceso basado en rol (profesor vs estudiante)
+- [x] Operaciones CRUD de encuestas (crear, leer, cerrar, eliminar)
+- [x] Envío de votos con validación
+- [x] Resultados en tiempo real via HTTP polling (ambas vistas de dashboard)
+- [x] Visibilidad de lista de votantes en resultados de profesor
+- [x] Flujos de login/registro separados por rol
+- [x] Sistema de diseño brutalist con componentes reutilizables
+- [x] Tests E2E con Playwright (4 tests automatizados)
 
 ---
 
-## 10. Handoff for New Session
+## 8. Qué está Pendiente
 
-### To Resume Work
-
-1. Start MongoDB: `net start MongoDB` (Windows)
-2. Start backend: `cd pollclass/server && npm run dev`
-3. Start frontend: `cd pollclass/client && npm run dev`
-
-### Key Context to Preserve
-
-- **Role flow is working**: Professor path (/professor/login → /dashboard) and student path (/student/login → /student) are both functional
-- **Token handling**: JWT stored in localStorage, sent in Authorization header
-- **Polling**: Both professor and student result views auto-refresh every few seconds
-- **Voters list**: Already implemented - shows in PollResults component
-- **Brutalist style**: Don't change the design system unless explicitly requested
-
-### DON'T CHANGE
-
-- The role-separation login/register flow (it's working well)
-- The polling-based real-time system (requirement was NO WebSockets)
-- The brutalist design language (it's intentional)
-
-### Quick Test Checklist
-
-- [ ] Professor can register and login
-- [ ] Student can register and login
-- [ ] Professor creates poll, gets code
-- [ ] Student enters code and votes
-- [ ] Professor sees votes in real-time with voter names
+- [ ] No hay elementos críticos pendientes
+- [ ] Potencialmente: Actualizaciones de README para nuevo flujo de auth
+- [ ] Potencialmente: Documentación de variables de entorno para acceso a red local
 
 ---
 
-## 11. UI & UX Enhancements
+## 9. Notas y Problemas Conocidos
 
-### Custom Modal System
+- Backend corre en puerto 3001, frontend en 5173
+- MongoDB debe estar corriendo localmente (mongodb://localhost:27017/pollclass)
+- Frontend .env necesita `VITE_API_BASE_URL=http://<IP_LOCAL>:3001` para pruebas móviles
+- Sin WebSockets - solo polling para actualizaciones en tiempo real
+- Rutas legacy (/professor/*, /student-old) redireccionan a nuevas rutas
+
+---
+
+## 10. Handoff para Nueva Sesión
+
+### Para Reanudar Trabajo
+
+1. Iniciar MongoDB: `net start MongoDB` (Windows)
+2. Iniciar backend: `cd pollclass/server && npm run dev`
+3. Iniciar frontend: `cd pollclass/client && npm run dev`
+
+### Contexto Clave a Preservar
+
+- **Flujo de roles funcionando**: Ruta de profesor (/professor/login → /dashboard) y ruta de estudiante (/student/login → /student) ambas funcionales
+- **Manejo de tokens**: JWT almacenado en localStorage, enviado en header Authorization
+- **Polling**: Ambas vistas de resultados de profesor y estudiante se actualizan automáticamente cada pocos segundos
+- **Lista de votantes**: Ya implementado - se muestra en componente PollResults
+- **Estilo brutalist**: No cambiar el sistema de diseño a menos que sea explícitamente solicitado
+
+### NO CAMBIAR
+
+- El flujo de login/registro con separación de roles (está funcionando bien)
+- El sistema de tiempo real basado en polling (el requisito era SIN WebSockets)
+- El lenguaje de diseño brutalist (es intencional)
+
+### Checklist de Prueba Rápida
+
+- [ ] Profesor puede registrarse e iniciar sesión
+- [ ] Estudiante puede registrarse e iniciar sesión
+- [ ] Profesor crea encuesta, obtiene código
+- [ ] Estudiante ingresa código y vota
+- [ ] Profesor ve votos en tiempo real con nombres de votantes
+
+---
+
+## 11. Mejoras de UI y UX
+
+### Sistema de Modal Personalizado
 - **ConfirmModal.jsx**: Componente de modal personalizado reutilizable
 - Reemplaza `alert()` y `confirm()` nativos del navegador
 - Estilo brutalist consistente:
@@ -278,7 +290,7 @@ pollclass/
   - Borde negro 3px
   - Box-shadow duro (6px 6px 0 black)
   - Sin border-radius
-- Overlay oscuro (rgba(0,0,0,0.4))
+- Overlay oscuro (rgba(0,0,0,0))
 - Botones: Confirmar (rojo) + Cancelar (blanco)
 
 ### Modal Implementado en:
@@ -307,7 +319,7 @@ pollclass/
 
 ---
 
-## 12. Component Behavior
+## 12. Comportamiento de Componentes
 
 ### PollCard.jsx
 - Muestra título, código, estado (badge), total de votos, fecha
@@ -333,7 +345,7 @@ pollclass/
 
 ---
 
-## 13. Behavioral Rules
+## 13. Reglas de Comportamiento
 
 ### Profesor
 - **Puede**: crear, ver, cerrar, eliminar encuestas
@@ -342,7 +354,7 @@ pollclass/
 ### Estudiante
 - **Puede**: unirse con código, votar, ver resultados, ver historial
 - **No puede**: cerrar encuestas (no hay botón en su vista)
-- Validación server-side: 409 si intenta votar dos veces
+- Validación del lado del servidor: 409 si intenta votar dos veces
 
 ### Botones Según Estado
 - Si poll.status === 'closed': botón "Cerrar encuesta" no se muestra
@@ -350,7 +362,7 @@ pollclass/
 
 ---
 
-## 14. Run Commands
+## 14. Comandos de Ejecución
 
 ```bash
 # Desde carpeta pollclass/
@@ -362,3 +374,61 @@ bun run dev
 Inicia:
 - Backend: localhost:3001
 - Frontend: localhost:5173
+
+---
+
+## 15. Testing E2E con Playwright
+
+### Resumen
+Se implementaron tests automatizados end-to-end usando **Playwright de Microsoft** para automatizar navegación, capturar screenshots y grabar videos.
+
+### Instalación
+```bash
+npm install -D @playwright/test
+```
+
+### Archivos de Test (`/tests/`)
+
+| # | Archivo | Descripción |
+|---|----------|------------|
+| 01 | `01-registro-profesor.spec.js` | Login profesor |
+| 02 | `02-crear-encuesta.spec.js` | Crear poll |
+| 03 | `03-registro-estudiante.spec.js` | Login estudiante |
+| 04 | `04-votar.spec.js` | Unirse y votar |
+| - | `config.js` | Datos compartidos |
+| - | `pollCode.js` | Código del poll |
+
+### Configuración (`playwright.config.js`)
+```javascript
+module.exports = defineConfig({
+  testDir: './tests',
+  timeout: 30000,
+  use: {
+    headless: false,    // Navegador visible
+    slowMo: 1000,     // Delay entre acciones
+    video: 'on',      // Grabar video
+  },
+});
+```
+
+### Datos de Prueba
+- Profesor: `profesor@pollclass.com` / `test123`
+- Estudiante: `estudiante@pollclass.com` / `test123`
+- Poll: "Encuesta Automatizada"
+
+### Resultados (4/4 PASANDO)
+| Test | Estado | Duración |
+|------|--------|---------|
+| Login Profesor | ✅ PASS | 1.8s |
+| Crear Encuesta | ✅ PASS | 2.4s |
+| Login Estudiante | ✅ PASS | 2.2s |
+| Votar | ✅ PASS | 4.3s |
+
+### Ejecutar Tests
+```bash
+npx playwright test
+```
+
+### Archivos Generados
+- `/screenshots/` - 32 imágenes
+- `/videos/pollclass-e2e.webm` - Video del test
