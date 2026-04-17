@@ -153,4 +153,44 @@ npx playwright test tests/security-roles.spec.js
 
 ---
 
-*Laboratorio 5 completado: 19 tests E2E implementados con assertions robustas, helpers reutilizables y documentación completa.*
+## Bitácora Agéntica (Interacción con IA)
+
+### ¿Qué se pidió al agente?
+Se solicitó a OpenCode que analizara la implementación existente de Playwright y que generara una suite completa de pruebas E2E que cubriera los flujos críticos del sistema PollClass, incluyendo profesor, estudiante y validaciones de seguridad.
+
+También se le pidió:
+- Mejorar la estructura de los tests
+- Implementar assertions más robustas
+- Agregar al menos un caso negativo (voto duplicado)
+- Crear scripts ejecutables y documentación
+
+### ¿Qué se aceptó del agente?
+Se aceptaron:
+- La estructura base de los archivos de test (professor, student, security)
+- La configuración inicial de Playwright
+- La idea de usar helpers reutilizables (fixtures.js)
+- La organización general de la suite
+
+### ¿Qué se corrigió manualmente?
+Se realizaron correcciones importantes:
+
+- Se eliminaron assertions débiles que usaban condiciones OR
+- Se fortalecieron validaciones para asegurar comportamiento real
+- Se ajustaron locators para hacerlos más estables
+- Se mejoró el caso negativo de voto duplicado
+- Se revisaron flujos para evitar falsos positivos
+
+Esto fue necesario porque algunas pruebas generadas por el agente podían pasar sin validar correctamente el resultado.
+
+### ¿Cómo se validó el resultado?
+La validación se realizó mediante:
+
+```bash
+npm run test:e2e
+```
+
+Resultado: **18 tests passando** (100%)
+
+---
+
+*Laboratorio 5 completado: 18 tests E2E implementados con assertions robustas, helpers reutilizables y documentación completa.*
