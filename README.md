@@ -425,17 +425,17 @@ La aplicación incluye **18 tests automatizados** end-to-end que verifican los f
 | student.spec.js | 6 | Registro, login, código inválido, unirse, votar |
 | security-roles.spec.js | 6 | Rutas protegidas, aislamiento de roles, logout |
 
-### 12.2 Ejecutar Tests
+### 12.2 Ejecutar Tests (con Bun)
 
 ```bash
 # Todos los tests
-npm run test:e2e
+bun run test:e2e
 
 # Con navegador visible
-npm run test:e2e:headed
+bun run test:e2e:headed
 
 # Ver reporte HTML
-npm run test:e2e:report
+bun run test:e2e:report
 ```
 
 ### 12.3 Documentación

@@ -171,30 +171,27 @@ npx playwright install chromium
 ### 5.2 Ejecutar Tests
 
 ```bash
-# Ejecutar todos los tests (recomendado)
-npm run test:e2e
+# Ejecutar todos los tests (con Bun)
+bun run test:e2e
 
 # Ejecutar en modo headed (navegador visible)
-npm run test:e2e:headed
+bun run test:e2e:headed
 
 # Ejecutar en modo UI (interfaz gráfica de Playwright)
-npm run test:e2e:ui
+bun run test:e2e:ui
 
 # Ver reporte HTML después de ejecutar
-npm run test:e2e:report
+bun run test:e2e:report
 ```
 
 ### 5.3 Opciones Adicionales
 
 ```bash
 # Ejecutar un test específico
-npx playwright test tests/professor.spec.js
-
-# Ejecutar un test específico en modo headed
-npx playwright test tests/professor.spec.js --headed
+bun x playwright test tests/professor.spec.js
 
 # Ejecutar con trace viewer (para depuración)
-npx playwright test --trace on
+bun x playwright test --trace on
 
 # Ejecutar solo tests de profesor
 npx playwright test tests/professor.spec.js

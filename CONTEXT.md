@@ -34,7 +34,7 @@ pollclass/
 ├── CONTEXT.md                    # Documentación técnica del proyecto
 ├── PLAYWRIGHT.md                # Documentación de tests E2E
 ├── AGENTS.md                    # Bitácora agéntica del laboratorio
-├── package.json                  # Scripts: npm run dev / test:e2e
+├── package.json                  # Scripts: bun run dev / bun run test:e2e
 ├── playwright.config.js         # Configuración de Playwright
 ├── tests/                       # Tests E2E (18 tests)
 │   ├── fixtures.js              # Helpers reutilizables

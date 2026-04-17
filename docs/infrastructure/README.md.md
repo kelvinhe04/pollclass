@@ -689,20 +689,20 @@ tests/
 | student.spec.js | 6 | Registro, login, código inválido, unirse, votar, resultados |
 | security-roles.spec.js | 6 | Rutas protegidas, aislamiento de roles, logout |
 
-### 12.4 Comandos de Ejecución
+### 12.4 Comandos de Ejecución (con Bun)
 
 ```bash
 # Ejecutar todos los tests
-npm run test:e2e
+bun run test:e2e
 
 # Modo headed (navegador visible)
-npm run test:e2e:headed
+bun run test:e2e:headed
 
 # Interfaz gráfica de Playwright
-npm run test:e2e:ui
+bun run test:e2e:ui
 
 # Ver reporte HTML
-npm run test:e2e:report
+bun run test:e2e:report
 ```
 
 ### 12.5 Documentación Adicional
