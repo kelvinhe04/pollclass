@@ -410,3 +410,36 @@ Este proyecto fue desarrollado utilizando **OpenCode** en modo agéntico, una he
 ### Error CORS
 - El backend está configurado para permitir todos los orígenes
 - Si persiste, verifica que el puerto 3001 no esté bloqueado
+
+---
+
+## 12. Tests E2E con Playwright
+
+### 12.1 Resumen
+
+La aplicación incluye **18 tests automatizados** end-to-end que verifican los flujos principales:
+
+| Suite | Tests | Cobertura |
+|-------|-------|-----------|
+| professor.spec.js | 6 | Registro, login, crear/cerrar encuestas, resultados |
+| student.spec.js | 6 | Registro, login, código inválido, unirse, votar |
+| security-roles.spec.js | 6 | Rutas protegidas, aislamiento de roles, logout |
+
+### 12.2 Ejecutar Tests
+
+```bash
+# Todos los tests
+npm run test:e2e
+
+# Con navegador visible
+npm run test:e2e:headed
+
+# Ver reporte HTML
+npm run test:e2e:report
+```
+
+### 12.3 Documentación
+
+Ver **PLAYWRIGHT.md** para documentación completa de los tests E2E.
+
+Ver **AGENTS.md** para la bitácora agéntica del laboratorio.

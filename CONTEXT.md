@@ -33,17 +33,16 @@ Ambos tipos de usuarios deben autenticarse con email/contraseña. El rol se elig
 pollclass/
 ├── CONTEXT.md                    # Documentación técnica del proyecto
 ├── PLAYWRIGHT.md                # Documentación de tests E2E
-├── package.json                  # Scripts: npm run dev / bun run dev
+├── AGENTS.md                    # Bitácora agéntica del laboratorio
+├── package.json                  # Scripts: npm run dev / test:e2e
 ├── playwright.config.js         # Configuración de Playwright
-├── tests/                       # Tests E2E
-│   ├── config.js                # Datos compartidos
-│   ├── pollCode.js              # Código del poll
-│   ├── 01-registro-profesor.spec.js
-│   ├── 02-crear-encuesta.spec.js
-│   ├── 03-registro-estudiante.spec.js
-│   └── 04-votar.spec.js
-├── screenshots/                  # Capturas de test
-├── videos/                     # Videos de test
+├── tests/                       # Tests E2E (18 tests)
+│   ├── fixtures.js              # Helpers reutilizables
+│   ├── professor.spec.js       # 6 tests - flujo profesor
+│   ├── student.spec.js          # 6 tests - flujo estudiante
+│   └── security-roles.spec.js  # 6 tests - seguridad y roles
+├── playwright-report/          # Reporte HTML (generado automáticamente)
+├── test-results/               # Capturas/videos de fallos
 ├── client/                       # React + Vite + Tailwind
 │   ├── src/
 │   │   ├── components/

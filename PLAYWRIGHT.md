@@ -2,186 +2,263 @@
 
 ## 1. Resumen
 
-Se implementaron tests automatizados end-to-end (E2E) usando **Playwright de Microsoft** para automatizar la navegación de la aplicación PollClass, capturar screenshots y grabar videos del flujo completo.
+Se implementaron pruebas automatizadas end-to-end (E2E) usando **Playwright de Microsoft** para verificar los flujos principales de la aplicación PollClass, incluyendo casos alternos y validaciones de seguridad.
 
-## 2. Instalación
+## 2. Estructura de Tests
 
-```bash
-cd D:\Programacion\Soft 9\5. Laboratorio PollClass — Desarrollo Agéntico Full Stack\pollclass
-npm install -D @playwright/test
+```
+tests/
+├── fixtures.js             # Helpers reutilizables
+├── professor.spec.js       # Tests del flujo de profesor (6 tests)
+├── student.spec.js         # Tests del flujo de estudiante (7 tests)
+└── security-roles.spec.js # Tests de seguridad y roles (6 tests)
 ```
 
-## 3. Archivos Creados
+### 2.1 Cobertura de Tests
 
-### 3.1 `playwright.config.js`
-Configuración del test runner:
+#### Profesor (professor.spec.js) - 6 tests
+| # | Test | Descripción |
+|---|------|-------------|
+| 01 | Registro exitoso | Registro y login de profesor |
+| 02 | Error login | Credenciales incorrectas |
+| 03 | Crear encuesta | Crear nueva encuesta |
+| 04 | Cerrar encuesta | Cerrar encuesta activa |
+| 05 | Interfaz de eliminaci\u00f3n | Verificar bot\u00f3n eliminar disponible |
+| 06 | Ver resultados | Ver resultados de encuesta |
+
+#### Estudiante (student.spec.js) - 6 tests
+| # | Test | Descripción |
+|---|------|-------------|
+| 01 | Registro exitoso | Registro de estudiante |
+| 02 | Login exitoso | Login de estudiante |
+| 03 | Error login | Credenciales incorrectas |
+| 04 | C\u00f3digo inv\u00e1lido | Error con c\u00f3digo inexistente |
+| 05 | Uni\u00f3n a encuesta | Unirse a encuesta |
+| 06 | Ver resultados | Ver resultados despu\u00e9s de crear |
+
+#### Seguridad y Roles (security-roles.spec.js) - 6 tests
+| # | Test | Descripción |
+|---|------|-------------|
+| 01 | Ruta protegida profesor | Sin auth -> redirección |
+| 02 | Ruta protegida estudiante | Sin auth -> redirección |
+| 03 | Estudiante en ruta profesor | Bloqueo de acceso |
+| 04 | Profesor en ruta estudiante | Bloqueo de acceso |
+| 05 | Logout profesor | Cerrar sesión |
+| 06 | Logout estudiante | Cerrar sesión |
+
+#### Seguridad y Roles (security-roles.spec.js)
+| # | Test | Descripción |
+|---|------|-------------|
+| 01 | Ruta protegida profesor | Sin auth -> redirección |
+| 02 | Ruta protegida estudiante | Sin auth -> redirección |
+| 03 | Estudiante en ruta profesor | Bloqueo de acceso |
+| 04 | Profesor en ruta estudiante | Bloqueo de acceso |
+| 05 | Logout profesor | Cerrar sesión |
+| 06 | Logout estudiante | Cerrar sesión |
+
+## 3. Configuración
+
+### 3.1 playwright.config.js
+
 ```javascript
 const { defineConfig } = require('@playwright/test');
+const isCI = process.env.CI === 'true';
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 30000,
+  timeout: 60000,
+  fullyParallel: false,
+  forbidOnly: !!isCI,
+  retries: isCI ? 1 : 0,
+  workers: 1,
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'playwright-report' }],
+    ['json', { outputFile: 'playwright-report/results.json' }]
+  ],
   use: {
-    headless: false,        // Navegador visible
-    slowMo: 1000,         // 1s de delay entre acciones
+    baseURL: 'http://localhost:5173',
+    headless: !isCI,
+    slowMo: isCI ? 0 : 500,
     viewport: { width: 1280, height: 720 },
-    video: 'on',          // Grabar video
+    ignoreHTTPSErrors: true,
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'on-first-retry',
   },
-  reporter: [['list']],
+  webServer: [
+    {
+      command: 'cd server && bun run dev',
+      port: 3001,
+      timeout: 120000,
+      env: { PORT: '3001', MONGODB_URI: 'mongodb://localhost:27017/pollclass' }
+    },
+    {
+      command: 'cd client && npm run dev',
+      port: 5173,
+      timeout: 120000,
+      env: { VITE_API_BASE_URL: 'http://localhost:3001' }
+    }
+  ],
+  projects: [{ name: 'chromium', use: { browserName: 'chromium' } }],
 });
 ```
 
-### 3.2 Tests Separados (`/tests/`)
+### 3.2 Características de la Configuración
 
-| # | Archivo | Descripción |
-|---|----------|------------|
-| 01 | `01-registro-profesor.spec.js` | Login profesor |
-| 02 | `02-crear-encuesta.spec.js` | Crear poll |
-| 03 | `03-registro-estudiante.spec.js` | Login estudiante |
-| 04 | `04-votar.spec.js` | Unirse y votar |
-| - | `config.js` | Datos compartidos |
-| - | `pollCode.js` | Código del poll |
+| Configuración | Descripción |
+|---------------|-------------|
+| `webServer` | Levanta automáticamente backend y frontend |
+| `baseURL` | URL base para todas las pruebas |
+| `headless` | Modo sin navegador en CI, visible en local |
+| `slowMo` | Delay de 500ms en local para visualización |
+| `trace` | Captura trace en primer retry |
+| `screenshot` | Solo en fallos |
+| `video` | Graba video en primer retry |
+| `retries` | 1 retry en CI (para flaky tests) |
 
-### 3.3 Datos de Prueba (config.js)
-```javascript
-module.exports = {
-  profesor: {
-    email: 'profesor@pollclass.com',
-    password: 'test123',
-    name: 'Profesor Test'
-  },
-  estudiante: {
-    email: 'estudiante@pollclass.com',
-    password: 'test123',
-    name: 'Estudiante Test'
-  },
-  poll: {
-    title: 'Encuesta Automatizada',
-    options: ['Opcion A', 'Opcion B'],
-    code: 'DSXQX4'
-  }
-};
+## 4. GitHub Actions
+
+### 4.1 Workflow (.github/workflows/e2e.yml)
+
+El workflow se ejecuta en:
+- Push a `master` o `main`
+- Pull requests
+- Ejecución manual (`workflow_dispatch`)
+
+```yaml
+name: E2E Tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    steps:
+      - Checkout code
+      - Setup Node.js
+      - Install dependencies (root, server, client)
+      - Install Playwright browsers
+      - Run E2E tests
+      - Upload reports (HTML, JSON, trace)
 ```
 
-## 4. Capturas Generadas
+## 5. Comandos para Ejecución Local
 
-Ubicación: `/screenshots/`
-
-### Test 01 - Registro Profesor
-| # | Archivo | Descripción |
-|---|----------|------------|
-| 01 | test01-01-login.png | Pantalla login |
-| 02 | test01-02-credentials.png | Credenciales ingresadas |
-| 03 | test01-04-dashboard.png | Dashboard profesor |
-
-### Test 02 - Crear Encuesta
-| # | Archivo | Descripción |
-|---|----------|------------|
-| 01 | test02-01-login.png | Login profesor |
-| 02 | test02-02-credentials.png | Credenciales |
-| 03 | test02-03-dashboard.png | Dashboard |
-| 04 | test02-04-form-filled.png | Formulario lleno |
-| 05 | test02-05-poll-created.png | Poll created |
-
-### Test 03 - Registro Estudiante
-| # | Archivo | Descripción |
-|---|----------|------------|
-| 01 | test03-01-login.png | Pantalla login |
-| 02 | test03-02-credentials.png | Credenciales ingresadas |
-| 03 | test03-04-dashboard.png | Dashboard estudiante |
-
-### Test 04 - Votar
-| # | Archivo | Descripción |
-|---|----------|------------|
-| 01 | test04-01-login.png | Login estudiante |
-| 02 | test04-02-credentials.png | Credenciales |
-| 03 | test04-03-dashboard.png | Dashboard |
-| 04 | test04-04-code-filled.png | Código ingresa |
-| 05 | test04-05-vote-form.png | Formulario votar |
-| 06 | test04-06-vote-selected.png | Opción seleccionada |
-| 07 | test04-07-vote-confirmed.png | Voto confirmado |
-| 08 | test04-08-results.png | Resultados |
-
-## 5. Video Generado
-
-Ubicación: `/videos/pollclass-e2e.webm`
-
-## 6. Cómo Ejecutar
+### 5.1 Instalación
 
 ```bash
-cd D:\Programacion\Soft 9\5. Laboratorio PollClass — Desarrollo Agéntico Full Stack\pollclass
-npx playwright test
+# Instalar dependencias del proyecto
+npm install
+
+# Instalar navegador de Playwright
+npx playwright install chromium
 ```
 
-## 7. Requisitos Previos
+### 5.2 Ejecutar Tests
 
-- MongoDB corriendo (`net start MongoDB`)
-- Backend: `localhost:3001`
-- Frontend: `localhost:5173`
+```bash
+# Ejecutar todos los tests (recomendado)
+npm run test:e2e
 
-## 8. Opciones de Configuración
+# Ejecutar en modo headed (navegador visible)
+npm run test:e2e:headed
 
-| Opción | Valor | Descripción |
-|--------|-------|-------------|
-| `headless` | `false` | Navegador visible |
-| `slowMo` | `1000` | Delay entre acciones |
-| `video` | `'on'` | Grabar video |
-| `timeout` | `30000` | Timeout por test |
+# Ejecutar en modo UI (interfaz gráfica de Playwright)
+npm run test:e2e:ui
 
-## 9. ¿Qué es Playwright?
-
-**Playwright** es un framework de test automation de **Microsoft** (código abierto, gratis).
-
-| Aspecto | Descripción |
-|--------|-------------|
-| Creador | Microsoft |
-| Tipo | Test automation framework |
-| Lenguaje | JavaScript/TypeScript |
-| Browsers | Chrome, Firefox, Safari |
-
-## 10. Estructura de Archivos
-
-```
-pollclass/
-├── playwright.config.js    # Configuración
-├── tests/
-│   ├── config.js         # Datos compartidos
-│   ├── pollCode.js       # Código del poll
-│   ├── 01-registro-profesor.spec.js
-│   ├── 02-crear-encuesta.spec.js
-│   ├── 03-registro-estudiante.spec.js
-│   └── 04-votar.spec.js
-├── screenshots/           # Capturas
-└── videos/
-    └── pollclass-e2e.webm
+# Ver reporte HTML después de ejecutar
+npm run test:e2e:report
 ```
 
-## 11. Resultados de Tests
+### 5.3 Opciones Adicionales
 
-### Última ejecución
-- **Fecha**: Tue Apr 14 2026
-- **Duración**: 10.7s
-- **Estado**: ✅ PASANDO (4/4)
+```bash
+# Ejecutar un test específico
+npx playwright test tests/professor.spec.js
 
-### Tests Ejecutados
-| # | Test | Estado | Duración |
-|---|------|--------|---------|
-| 01 | Login Profesor | ✅ PASS | 1.8s |
-| 02 | Crear Encuesta | ✅ PASS | 2.4s |
-| 03 | Login Estudiante | ✅ PASS | 2.2s |
-| 04 | Votar | ✅ PASS | 4.3s |
+# Ejecutar un test específico en modo headed
+npx playwright test tests/professor.spec.js --headed
 
-### Datos de Prueba
-| Campo | Valor |
-|-------|-------|
-| Profesor | `profesor@pollclass.com` |
-| Estudiante | `estudiante@pollclass.com` |
-| Contraseña | `test123` |
-| Poll | Encuesta Automatizada |
-| Código poll | `DSXQX4` |
+# Ejecutar con trace viewer (para depuración)
+npx playwright test --trace on
 
-### Capturas
-32 imágenes en `/screenshots/`
+# Ejecutar solo tests de profesor
+npx playwright test tests/professor.spec.js
 
-### Video
-`/videos/pollclass-e2e.webm`
+# Ejecutar solo tests de estudiante
+npx playwright test tests/student.spec.js
+
+# Ejecutar solo tests de seguridad
+npx playwright test tests/security-roles.spec.js
+
+# Generar código de test con recorder
+npx playwright codegen http://localhost:5173
+```
+
+## 6. Requisitos Previos
+
+- **Node.js** 20+
+- **Bun** (para el backend)
+- **MongoDB** corriendo localmente (solo si no se usa el servicio en CI)
+
+### 6.1 Iniciar MongoDB (Windows)
+
+```bash
+net start MongoDB
+```
+
+## 7. Resultados Esperados
+
+| Suite | Tests | Estado Esperado |
+|-------|-------|-----------------|
+| professor.spec.js | 6 | ✅ Todos pasando |
+| student.spec.js | 6 | ✅ Todos pasando |
+| security-roles.spec.js | 6 | ✅ Todos pasando |
+| **Total** | **18** | **100% passing** |
+
+## 8. Notas Importantes
+
+- Los tests usan emails únicos generados con `Date.now()` para evitar colisiones en la base de datos.
+- Los tests son **independientes** entre sí (pueden ejecutarse en cualquier orden).
+- Los tests de estudiante crean automáticamente encuestas via los tests de profesor (flujo integrado).
+- **helpers reutilizables**: `tests/fixtures.js` contiene funciones como `generateEmail`, `registerProfessor`, `registerStudent`, `createPoll`, `joinPollWithCode`.
+- En CI, el servicio MongoDB se levanta automáticamente desde el workflow.
+
+## 9. Troubleshooting
+
+### Error: MongoDB no está corriendo
+```bash
+# Windows
+net start MongoDB
+
+# Linux/Mac
+sudo systemctl start mongod
+```
+
+### Error: Puerto en uso
+```bash
+# Matar proceso en puerto 3001
+lsof -ti:3001 | xargs kill -9
+
+# Matar proceso en puerto 5173
+lsof -ti:5173 | xargs kill -9
+```
+
+### Ver trace después de un fallo
+```bash
+npx playwright show-report playwright-report/trace.zip
+```
