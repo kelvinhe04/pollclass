@@ -428,11 +428,17 @@ La aplicación incluye **18 tests automatizados** end-to-end que verifican los f
 ### 12.2 Ejecutar Tests (con Bun)
 
 ```bash
-# Todos los tests
+# PRIMERA VEZ - Instalar navegador Chromium
+bun run setup:e2e
+
+# Todos los tests (headless - sin navegador)
 bun run test:e2e
 
 # Con navegador visible
 bun run test:e2e:headed
+
+# Interfaz gráfica de Playwright
+bun run test:e2e:ui
 
 # Ver reporte HTML
 bun run test:e2e:report
