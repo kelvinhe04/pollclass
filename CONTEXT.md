@@ -38,7 +38,7 @@ pollclass/
 ├── playwright.config.js         # Configuración de Playwright
 ├── tests/                       # Tests E2E (19 tests)
 │   ├── fixtures.js              # Helpers reutilizables
-│   ├── professor.spec.js       # 6 tests - flujo profesor
+│   ├── professor.spec.js       # 7 tests - flujo profesor
 │   ├── student.spec.js          # 6 tests - flujo estudiante
 │   └── security-roles.spec.js  # 6 tests - seguridad y roles
 ├── playwright-report/          # Reporte HTML (generado automáticamente)
@@ -414,10 +414,10 @@ bun run test:e2e:ui
 bun run test:e2e:report
 ```
 
-### Resultados (18/18 PASANDO)
+### Resultados (19/19 PASANDO)
 | Suite | Tests | Estado |
 |-------|-------|--------|
-| professor.spec.js | 6 | ✅ PASS |
+| professor.spec.js | 7 | ✅ PASS |
 | student.spec.js | 6 | ✅ PASS |
 | security-roles.spec.js | 6 | ✅ PASS |
 | **Total** | **19** | **100%** |
