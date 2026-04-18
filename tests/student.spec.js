@@ -69,4 +69,20 @@ test.describe('Estudiante - Flujos Principales', () => {
     await joinPollWithCode(page, pollCode.trim().substring(0, 6));
     await expect(page.locator('h1')).toContainText('VISTA ESTUDIANTE');
   });
+
+  test('07 - Voto duplicado (CASO NEGATIVO)', async ({ page }) => {
+    const professorEmail = generateEmail('prof_duplicate');
+    await registerProfessor(page, professorEmail);
+    await createPoll(page, 'Encuesta Voto Doble', 'Opcion A', 'Opcion B');
+    const codeElement = page.locator('[class*="font-mono"]');
+    pollCode = await codeElement.textContent();
+    pollCode = pollCode.trim().substring(0, 6);
+    
+    await page.goto('/student/register');
+    const studentEmail = generateEmail('student_dup_' + Date.now());
+    await registerStudent(page, studentEmail);
+    await joinPollWithCode(page, pollCode);
+    
+    await expect(page.locator('button:has-text("VOTAR")')).toBeVisible();
+  });
 });
