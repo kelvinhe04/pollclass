@@ -9,14 +9,14 @@ Se implementaron pruebas automatizadas end-to-end (E2E) usando **Playwright de M
 ```
 tests/
 ├── fixtures.js             # Helpers reutilizables
-├── professor.spec.js       # Tests del flujo de profesor (6 tests)
-├── student.spec.js         # Tests del flujo de estudiante (7 tests)
+├── professor.spec.js       # Tests del flujo de profesor (7 tests)
+├── student.spec.js         # Tests del flujo de estudiante (6 tests)
 └── security-roles.spec.js # Tests de seguridad y roles (6 tests)
 ```
 
 ### 2.1 Cobertura de Tests
 
-#### Profesor (professor.spec.js) - 6 tests
+#### Profesor (professor.spec.js) - 7 tests
 | # | Test | Descripción |
 |---|------|-------------|
 | 01 | Registro exitoso | Registro y login de profesor |
