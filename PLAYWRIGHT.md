@@ -33,9 +33,10 @@ tests/
 | 01 | Registro exitoso | Registro de estudiante |
 | 02 | Login exitoso | Login de estudiante |
 | 03 | Error login | Credenciales incorrectas |
-| 04 | C\u00f3digo inv\u00e1lido | Error con c\u00f3digo inexistente |
-| 05 | Uni\u00f3n a encuesta | Unirse a encuesta |
-| 06 | Ver resultados | Ver resultados despu\u00e9s de crear |
+| 04 | Código inválido | Error con código inexistente |
+| 05 | Unión a encuesta | Unirse a encuesta |
+| 06 | Ver resultados | Ver resultados después de crear |
+| 07 | Voto duplicado | CASO NEGATIVO |
 
 #### Seguridad y Roles (security-roles.spec.js) - 6 tests
 | # | Test | Descripción |
