@@ -192,7 +192,7 @@ Se realizaron correcciones importantes:
 - Se ajustaron locators para hacerlos más estables
 - Se agregaron helpers adicionales: closePoll, deletePoll, logout
 - Se agregaron scripts por suite: test:professor, test:student, test:security
-- Se aumentó a 19 tests totales
+- Se aumentó a 20 tests totales (incluyendo caso negativo de voto duplicado)
 
 Esto fue necesario porque algunas pruebas generadas por el agente podían pasar sin validar correctamente el resultado.
 
@@ -203,8 +203,8 @@ La validación se realizó mediante:
 bun run test:e2e
 ```
 
-Resultado: **19 tests pasando** (100%)
+Resultado: **20 tests pasando** (100%)
 
 ---
 
-*Laboratorio 5 completado: 19 tests E2E implementados con assertions robustas, helpers reutilizables, scripts por suite y documentación completa.*
+*Laboratorio 5 completado: 20 tests E2E implementados con assertions robustas, helpers reutilizables, scripts por suite y documentación completa.*
