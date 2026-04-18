@@ -395,7 +395,7 @@ bun run setup:e2e
 | Archivo | Tests | Descripción |
 |---------|-------|-------------|
 | `fixtures.js` | - | Helpers reutilizables |
-| `professor.spec.js` | 6 | Flujo completo profesor |
+| `professor.spec.js` | 7 | Flujo completo profesor |
 | `student.spec.js` | 6 | Flujo estudiante |
 | `security-roles.spec.js` | 6 | Seguridad y roles |
 
