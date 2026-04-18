@@ -16,8 +16,8 @@ module.exports = defineConfig({
   ],
   use: {
     baseURL: 'http://localhost:5173',
-    headless: isCI,
-    slowMo: isCI ? 0 : 500,
+    headless: true,
+    slowMo: 500,
     viewport: { width: 1280, height: 720 },
     ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
