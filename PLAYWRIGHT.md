@@ -121,10 +121,10 @@ module.exports = defineConfig({
 
 ### 4.1 Workflow (.github/workflows/e2e.yml)
 
-El workflow se ejecuta en:
-- Push a `master` o `main`
+El workflow se ejecuta automáticamente en:
+- Push a master o main
 - Pull requests
-- Ejecución manual (`workflow_dispatch`)
+- Ejecución manual (workflow_dispatch)
 
 ```yaml
 name: E2E Tests
@@ -149,12 +149,22 @@ jobs:
 
     steps:
       - Checkout code
-      - Setup Node.js
-      - Install dependencies (root, server, client)
+      - Setup Bun
+      - Verify Bun installation
+      - Install root dependencies (npm install)
+      - Install server dependencies
+      - Install client dependencies
       - Install Playwright browsers
       - Run E2E tests
-      - Upload reports (HTML, JSON, trace)
+      - Upload Playwright report (always)
+      - Upload Playwright trace (always)
 ```
+
+### Características:
+- **Runtime**: Bun para ejecutar Playwright, npm para instalar dependencias
+- **MongoDB**: Se levanta automáticamente como servicio
+- **Reportes**: Se suben independientemente del resultado (passed o failed)
+- **Timeout**: 30 minutos máximo por ejecución
 
 ## 5. Comandos para Ejecución Local
 
