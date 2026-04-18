@@ -12,7 +12,10 @@
     "test:e2e": "bun run playwright test",
     "test:e2e:headed": "bun run playwright test --headed",
     "test:e2e:ui": "bun run playwright test --ui",
-    "test:e2e:report": "bun run playwright show-report"
+    "test:e2e:report": "bun run playwright show-report",
+    "test:professor": "bun run playwright test tests/professor.spec.js",
+    "test:student": "bun run playwright test tests/student.spec.js",
+    "test:security": "bun run playwright test tests/security-roles.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",

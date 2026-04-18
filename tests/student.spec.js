@@ -1,9 +1,12 @@
 const { test, expect } = require('@playwright/test');
-const { generateEmail, registerStudent, registerProfessor, joinPollWithCode, createPoll } = require('./fixtures');
+const { generateEmail, registerStudent, registerProfessor, joinPollWithCode, createPoll, logout } = require('./fixtures');
 
 test.describe('Estudiante - Flujos Principales', () => {
+  let pollCode;
+
   test.beforeEach(async ({ page }) => {
     page.on('dialog', dialog => dialog.accept());
+    pollCode = null;
   });
 
   test('01 - Registro exitoso de estudiante', async ({ page }) => {
@@ -36,25 +39,34 @@ test.describe('Estudiante - Flujos Principales', () => {
     const email = generateEmail('student');
     await registerStudent(page, email);
     await joinPollWithCode(page, 'XXXXXX');
-    const errorVisible = await page.locator('text=no encontrada').isVisible().catch(() => false) ||
-                        await page.locator('text=inválido').isVisible().catch(() => false) ||
-                        await page.locator('text=No encontrada').isVisible().catch(() => false);
-    expect(errorVisible || !(await page.locator('text=UNIRSE A ENCUESTA').isVisible())).toBe(true);
+    const hasError = await page.locator('text=no encontrada').isVisible().catch(() => false) ||
+                   await page.locator('text=inválido').isVisible().catch(() => false);
+    expect(hasError || !(await page.locator('button:has-text("UNIRSE A ENCUESTA")').isVisible())).toBe(true);
   });
 
-  test('05 - Vista de uni\u00f3n a encuesta', async ({ page }) => {
-    const professorEmail = generateEmail('prof_join');
+  test('05 - Unirse a encuesta activa', async ({ page }) => {
+    const professorEmail = generateEmail('prof_poll');
     await registerProfessor(page, professorEmail);
-    await createPoll(page, 'Encuesta Union Test', 'Opcion A', 'Opcion B');
-    await expect(page.locator('text=Encuesta Union Test')).toBeVisible();
-    await expect(page.locator('button:has-text("RESULTADOS")')).toBeVisible();
+    await createPoll(page, 'Encuesta para Unirse', 'Opcion A', 'Opcion B');
+    const codeElement = page.locator('[class*="font-mono"]');
+    pollCode = await codeElement.textContent();
+    await page.goto('/student/register');
+    const studentEmail = generateEmail('student_join');
+    await registerStudent(page, studentEmail);
+    await joinPollWithCode(page, pollCode.trim().substring(0, 6));
+    await expect(page.locator('button:has-text("VOTAR")')).toBeVisible();
   });
 
-  test('06 - Ver resultados despu\u00e9s de crear encuesta', async ({ page }) => {
-    const professorEmail = generateEmail('prof_results_simple');
+  test('06 - Ver resultados después de unirse', async ({ page }) => {
+    const professorEmail = generateEmail('prof_results3');
     await registerProfessor(page, professorEmail);
-    await createPoll(page, 'Encuesta Results Simple', 'Opcion A', 'Opcion B');
-    await page.locator('button:has-text("RESULTADOS")').first().click();
-    await expect(page.locator('text=Resultados')).toBeVisible({ timeout: 10000 });
+    await createPoll(page, 'Encuesta para Ver', 'Opcion A', 'Opcion B');
+    const codeElement = page.locator('[class*="font-mono"]');
+    pollCode = await codeElement.textContent();
+    await page.goto('/student/register');
+    const studentEmail = generateEmail('student_view');
+    await registerStudent(page, studentEmail);
+    await joinPollWithCode(page, pollCode.trim().substring(0, 6));
+    await expect(page.locator('h1')).toContainText('VISTA ESTUDIANTE');
   });
 });

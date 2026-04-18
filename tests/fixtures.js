@@ -52,15 +52,37 @@ async function createPoll(page, title, option1, option2) {
   await page.waitForSelector(`text=${title}`, { timeout: 15000 });
 }
 
+async function closePoll(page) {
+  await page.locator('button:has-text("CERRAR ENCUESTA")').first().click();
+  await page.waitForTimeout(2000);
+}
+
+async function deletePoll(page) {
+  await page.locator('button:has-text("ELIMINAR")').first().click();
+  await page.waitForTimeout(1000);
+  await page.locator('button:has-text("CONFIRMAR")').click().catch(() => {});
+  await page.waitForTimeout(1000);
+}
+
 async function joinPollWithCode(page, code) {
   await page.locator('input[placeholder="ABC123"]').fill(code);
   await page.click('button:has-text("UNIRSE A ENCUESTA")');
   await page.waitForTimeout(2000);
 }
 
-async function submitVote(page, optionIndex = 0) {
-  await page.locator(`button:has-text("VOTAR")`).click();
+async function submitVote(page) {
+  await page.locator('button:has-text("VOTAR")').click();
   await page.waitForTimeout(1000);
+}
+
+async function logout(page) {
+  await page.locator('button:has-text("CERRAR SESION")').click();
+  await page.waitForTimeout(1500);
+  const confirmBtn = page.locator('button:has-text("CONFIRMAR")');
+  if (await confirmBtn.isVisible().catch(() => false)) {
+    await confirmBtn.click();
+    await page.waitForTimeout(1000);
+  }
 }
 
 module.exports = {
@@ -71,6 +93,9 @@ module.exports = {
   registerStudent,
   loginStudent,
   createPoll,
+  closePoll,
+  deletePoll,
   joinPollWithCode,
   submitVote,
+  logout,
 };
