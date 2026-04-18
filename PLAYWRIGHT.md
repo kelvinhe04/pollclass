@@ -27,7 +27,7 @@ tests/
 | 06 | Ver resultados | Ver resultados de encuesta |
 | 07 | Cerrar sesión | Logout de profesor |
 
-#### Estudiante (student.spec.js) - 6 tests
+#### Estudiante (student.spec.js) - 7 tests
 | # | Test | Descripción |
 |---|------|-------------|
 | 01 | Registro exitoso | Registro de estudiante |

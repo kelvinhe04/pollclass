@@ -677,7 +677,7 @@ La aplicación incluye **19 tests automatizados** end-to-end que verifican los f
 tests/
 ├── fixtures.js              # Helpers reutilizables
 ├── professor.spec.js       # 7 tests - flujo profesor
-├── student.spec.js          # 6 tests - flujo estudiante
+├── student.spec.js          # 7 tests - flujo estudiante
 └── security-roles.spec.js  # 6 tests - seguridad y roles
 ```
 
@@ -686,7 +686,7 @@ tests/
 | Suite | Tests | Flujos |
 |-------|-------|--------|
 | professor.spec.js | 7 | Registro, login, crear/cerrar encuestas, eliminar, resultados, logout |
-| student.spec.js | 6 | Registro, login, código inválido, unirse, votar, resultados |
+| student.spec.js | 7 | Registro, login, código inválido, unirse, votar, resultados, voto duplicado |
 | security-roles.spec.js | 6 | Rutas protegidas, aislamiento de roles, logout |
 
 ### 12.4 Comandos de Ejecución (con Bun)

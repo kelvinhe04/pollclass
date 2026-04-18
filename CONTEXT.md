@@ -39,7 +39,7 @@ pollclass/
 ├── tests/                       # Tests E2E (20 tests)
 │   ├── fixtures.js              # Helpers reutilizables
 │   ├── professor.spec.js       # 7 tests - flujo profesor
-│   ├── student.spec.js          # 6 tests - flujo estudiante
+│   ├── student.spec.js          # 7 tests - flujo estudiante
 │   └── security-roles.spec.js  # 6 tests - seguridad y roles
 ├── playwright-report/          # Reporte HTML (generado automáticamente)
 ├── test-results/               # Capturas/videos de fallos
@@ -396,7 +396,7 @@ bun run setup:e2e
 |---------|-------|-------------|
 | `fixtures.js` | - | Helpers reutilizables |
 | `professor.spec.js` | 7 | Flujo completo profesor |
-| `student.spec.js` | 6 | Flujo estudiante |
+| `student.spec.js` | 7 | Flujo estudiante |
 | `security-roles.spec.js` | 6 | Seguridad y roles |
 
 ### Ejecutar Tests
