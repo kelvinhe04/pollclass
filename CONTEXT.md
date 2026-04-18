@@ -36,9 +36,9 @@ pollclass/
 ├── AGENTS.md                    # Bitácora agéntica del laboratorio
 ├── package.json                  # Scripts: bun run dev / bun run test:e2e
 ├── playwright.config.js         # Configuración de Playwright
-├── tests/                       # Tests E2E (20 tests)
+├── tests/                       # Tests E2E (21 tests)
 │   ├── fixtures.js              # Helpers reutilizables
-│   ├── professor.spec.js       # 7 tests - flujo profesor
+│   ├── professor.spec.js       # 8 tests - flujo profesor
 │   ├── student.spec.js          # 7 tests - flujo estudiante
 │   └── security-roles.spec.js  # 6 tests - seguridad y roles
 ├── playwright-report/          # Reporte HTML (generado automáticamente)
@@ -379,7 +379,7 @@ Inicia:
 ## 15. Testing E2E con Playwright
 
 ### Resumen
-Se implementaron **20 tests automatizados** end-to-end usando **Playwright** para verificar los flujos principales de la aplicación PollClass.
+Se implementaron **21 tests automatizados** end-to-end usando **Playwright** para verificar los flujos principales de la aplicación PollClass.
 
 ### Primera Configuración
 ```bash
@@ -395,7 +395,7 @@ bun run setup:e2e
 | Archivo | Tests | Descripción |
 |---------|-------|-------------|
 | `fixtures.js` | - | Helpers reutilizables |
-| `professor.spec.js` | 7 | Flujo completo profesor |
+| `professor.spec.js` | 8 | Flujo completo profesor |
 | `student.spec.js` | 7 | Flujo estudiante |
 | `security-roles.spec.js` | 6 | Seguridad y roles |
 
@@ -414,13 +414,13 @@ bun run test:e2e:ui
 bun run test:e2e:report
 ```
 
-### Resultados (19/19 PASANDO)
+### Resultados (21/21 PASANDO)
 | Suite | Tests | Estado |
 |-------|-------|--------|
-| professor.spec.js | 7 | ✅ PASS |
+| professor.spec.js | 8 | ✅ PASS |
 | student.spec.js | 7 | ✅ PASS |
 | security-roles.spec.js | 6 | ✅ PASS |
-| **Total** | **20** | **100%** |
+| **Total** | **21** | **100%** |
 
 ### Configuración (`playwright.config.js`)
 La configuración actual usa webServer para iniciar automáticamente backend y frontend durante los tests.

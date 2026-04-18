@@ -12,7 +12,18 @@ test.describe('Profesor - Flujos Principales', () => {
     await expect(page.locator('h1')).toContainText('PANEL PROFESOR');
   });
 
-  test('02 - Error login con credenciales incorrectas', async ({ page }) => {
+  test('02 - Login exitoso de profesor', async ({ page }) => {
+    const email = generateEmail('professor');
+    await registerProfessor(page, email);
+    await page.goto('/professor/login');
+    await page.locator('input[type="email"]').fill(email);
+    await page.locator('input[type="password"]').fill('test123');
+    await page.click('button:has-text("INICIAR SESION")');
+    await page.waitForURL('**/dashboard', { timeout: 15000 });
+    await expect(page.locator('h1')).toContainText('PANEL PROFESOR');
+  });
+
+  test('03 - Error login con credenciales incorrectas', async ({ page }) => {
     await page.goto('/professor/login');
     await page.waitForLoadState('networkidle');
     await page.locator('input[type="email"]').fill('noexiste@pollclass.com');
@@ -21,14 +32,14 @@ test.describe('Profesor - Flujos Principales', () => {
     await page.waitForURL('**/professor/login', { timeout: 5000 });
   });
 
-  test('03 - Crear encuesta exitosa', async ({ page }) => {
+  test('04 - Crear encuesta exitosa', async ({ page }) => {
     const email = generateEmail('professor');
     await registerProfessor(page, email);
     await createPoll(page, 'Encuesta Test E2E', 'Opcion A', 'Opcion B');
     await expect(page.locator('text=ACTIVA')).toBeVisible();
   });
 
-  test('04 - Cerrar encuesta', async ({ page }) => {
+  test('05 - Cerrar encuesta', async ({ page }) => {
     const email = generateEmail('professor');
     await registerProfessor(page, email);
     await createPoll(page, 'Encuesta a Cerrar', 'Opcion A', 'Opcion B');
@@ -38,14 +49,14 @@ test.describe('Profesor - Flujos Principales', () => {
     expect(isClosed || await page.locator('text=ACTIVA').isVisible()).toBe(true);
   });
 
-  test('05 - Interfaz de eliminación disponible', async ({ page }) => {
+  test('06 - Interfaz de eliminación disponible', async ({ page }) => {
     const email = generateEmail('professor');
     await registerProfessor(page, email);
     await createPoll(page, 'Encuesta a Eliminar', 'Opcion A', 'Opcion B');
     await expect(page.locator('button:has-text("ELIMINAR")')).toBeVisible();
   });
 
-  test('06 - Ver resultados de encuesta', async ({ page }) => {
+  test('07 - Ver resultados de encuesta', async ({ page }) => {
     const email = generateEmail('professor');
     await registerProfessor(page, email);
     await createPoll(page, 'Encuesta Resultados', 'Opcion A', 'Opcion B');
@@ -54,7 +65,7 @@ test.describe('Profesor - Flujos Principales', () => {
     expect(hasResults).toBeTruthy();
   });
 
-  test('07 - Cerrar sesión (logout)', async ({ page }) => {
+  test('08 - Cerrar sesión (logout)', async ({ page }) => {
     const email = generateEmail('professor_logout');
     await registerProfessor(page, email);
     await logout(page);

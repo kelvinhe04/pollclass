@@ -9,23 +9,24 @@ Se implementaron pruebas automatizadas end-to-end (E2E) usando **Playwright de M
 ```
 tests/
 ├── fixtures.js             # Helpers reutilizables
-├── professor.spec.js       # Tests del flujo de profesor (7 tests)
+├── professor.spec.js       # Tests del flujo de profesor (8 tests)
 ├── student.spec.js         # Tests del flujo de estudiante (7 tests)
 └── security-roles.spec.js # Tests de seguridad y roles (6 tests)
 ```
 
 ### 2.1 Cobertura de Tests
 
-#### Profesor (professor.spec.js) - 7 tests
+#### Profesor (professor.spec.js) - 8 tests
 | # | Test | Descripción |
 |---|------|-------------|
-| 01 | Registro exitoso | Registro y login de profesor |
-| 02 | Error login | Credenciales incorrectas |
-| 03 | Crear encuesta | Crear nueva encuesta |
-| 04 | Cerrar encuesta | Cerrar encuesta activa |
-| 05 | Interfaz de eliminación | Verificar botón eliminar disponible |
-| 06 | Ver resultados | Ver resultados de encuesta |
-| 07 | Cerrar sesión | Logout de profesor |
+| 01 | Registro exitoso | Registro de profesor |
+| 02 | Login exitoso | Login de profesor ya registrado |
+| 03 | Error login | Credenciales incorrectas |
+| 04 | Crear encuesta | Crear nueva encuesta |
+| 05 | Cerrar encuesta | Cerrar encuesta activa |
+| 06 | Interfaz de eliminación | Verificar botón eliminar disponible |
+| 07 | Ver resultados | Ver resultados de encuesta |
+| 08 | Cerrar sesión | Logout de profesor |
 
 #### Estudiante (student.spec.js) - 7 tests
 | # | Test | Descripción |
@@ -187,8 +188,8 @@ bun run setup:e2e
 bun run test:e2e
 
 # Ejecutar suites específicas
-bun run test:professor   # Solo tests de profesor (7)
-bun run test:student    # Solo tests de estudiante (6)
+bun run test:professor   # Solo tests de profesor (8)
+bun run test:student    # Solo tests de estudiante (7)
 bun run test:security   # Solo tests de seguridad (6)
 
 # Ejecutar en modo headed (navegador visible)
@@ -235,10 +236,10 @@ net start MongoDB
 
 | Suite | Tests | Estado Esperado |
 |-------|-------|-----------------|
-| professor.spec.js | 7 | ✅ Todos pasando |
+| professor.spec.js | 8 | ✅ Todos pasando |
 | student.spec.js | 7 | ✅ Todos pasando |
 | security-roles.spec.js | 6 | ✅ Todos pasando |
-| **Total** | **20** | **100% passing** |
+| **Total** | **21** | **100% passing** |
 
 ## 8. Notas Importantes
 

@@ -62,7 +62,7 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
   - `logout()` - Cerrar sesión
 
 #### 3. tests/professor.spec.js
-- 7 tests con assertions robustas
+- 8 tests con assertions robustas
 - Usa helpers de fixtures
 - Validación real de cierre, eliminación y logout
 
@@ -117,8 +117,8 @@ bun run setup:e2e
 bun run test:e2e
 
 # Ejecutar suites específicas
-bun run test:professor   # 7 tests - flujo profesor
-bun run test:student   # 6 tests - flujo estudiante
+bun run test:professor   # 8 tests - flujo profesor
+bun run test:student   # 7 tests - flujo estudiante
 bun run test:security  # 6 tests - seguridad y roles
 
 # Modo headed (navegador visible)
@@ -142,10 +142,10 @@ bun x playwright test tests/security-roles.spec.js
 
 | Suite | Tests | Descripción |
 |-------|-------|-------------|
-| professor.spec.js | 7 | Flujo completo profesor |
+| professor.spec.js | 8 | Flujo completo profesor |
 | student.spec.js | 7 | Flujo estudiante + voto duplicado |
 | security-roles.spec.js | 6 | Validaciones de seguridad |
-| **Total** | **20** | **100% coverage** |
+| **Total** | **21** | **100% coverage** |
 
 ---
 
@@ -192,7 +192,7 @@ Se realizaron correcciones importantes:
 - Se ajustaron locators para hacerlos más estables
 - Se agregaron helpers adicionales: closePoll, deletePoll, logout
 - Se agregaron scripts por suite: test:professor, test:student, test:security
-- Se aumentó a 20 tests totales (incluyendo caso negativo de voto duplicado)
+- Se aumentó a 21 tests totales (incluyendo caso negativo de voto duplicado)
 
 Esto fue necesario porque algunas pruebas generadas por el agente podían pasar sin validar correctamente el resultado.
 
@@ -203,8 +203,8 @@ La validación se realizó mediante:
 bun run test:e2e
 ```
 
-Resultado: **20 tests pasando** (100%)
+Resultado: **21 tests pasando** (100%)
 
 ---
 
-*Laboratorio 5 completado: 20 tests E2E implementados con assertions robustas, helpers reutilizables, scripts por suite y documentación completa.*
+*Laboratorio 5 completado: 21 tests E2E implementados con assertions robustas, helpers reutilizables, scripts por suite y documentación completa.*

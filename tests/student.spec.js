@@ -39,9 +39,7 @@ test.describe('Estudiante - Flujos Principales', () => {
     const email = generateEmail('student');
     await registerStudent(page, email);
     await joinPollWithCode(page, 'XXXXXX');
-    const hasError = await page.locator('text=no encontrada').isVisible().catch(() => false) ||
-                   await page.locator('text=inválido').isVisible().catch(() => false);
-    expect(hasError || !(await page.locator('button:has-text("UNIRSE A ENCUESTA")').isVisible())).toBe(true);
+    await expect(page.locator('text=Encuesta no encontrada')).toBeVisible();
   });
 
   test('05 - Unirse a encuesta activa', async ({ page }) => {
@@ -67,7 +65,7 @@ test.describe('Estudiante - Flujos Principales', () => {
     const studentEmail = generateEmail('student_view');
     await registerStudent(page, studentEmail);
     await joinPollWithCode(page, pollCode.trim().substring(0, 6));
-    await expect(page.locator('h1')).toContainText('VISTA ESTUDIANTE');
+    await expect(page.locator('button:has-text("VOTAR")')).toBeVisible();
   });
 
   test('07 - Voto duplicado (CASO NEGATIVO)', async ({ page }) => {
@@ -77,12 +75,23 @@ test.describe('Estudiante - Flujos Principales', () => {
     const codeElement = page.locator('[class*="font-mono"]');
     pollCode = await codeElement.textContent();
     pollCode = pollCode.trim().substring(0, 6);
-    
+
     await page.goto('/student/register');
-    const studentEmail = generateEmail('student_dup_' + Date.now());
+    const studentEmail = generateEmail('student_dup');
     await registerStudent(page, studentEmail);
     await joinPollWithCode(page, pollCode);
-    
-    await expect(page.locator('button:has-text("VOTAR")')).toBeVisible();
+
+    // Primer voto: seleccionar opción y votar
+    await page.locator('input[type="radio"]').first().click();
+    await page.click('button:has-text("VOTAR")');
+    await expect(page.locator('text=VOTO REGISTRADO')).toBeVisible({ timeout: 10000 });
+
+    // Volver a la vista de unirse y reintentar con el mismo código
+    await page.click('button:has-text("VOTAR EN OTRA ENCUESTA")');
+    await page.waitForTimeout(1000);
+    await joinPollWithCode(page, pollCode);
+
+    // El sistema debe detectar el voto previo
+    await expect(page.locator('text=YA VOTASTE EN ESTA ENCUESTA')).toBeVisible({ timeout: 10000 });
   });
 });

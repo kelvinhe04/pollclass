@@ -417,11 +417,11 @@ Este proyecto fue desarrollado utilizando **OpenCode** en modo agéntico, una he
 
 ### 12.1 Resumen
 
-La aplicación incluye **18 tests automatizados** end-to-end que verifican los flujos principales:
+La aplicación incluye **21 tests automatizados** end-to-end que verifican los flujos principales:
 
 | Suite | Tests | Cobertura |
 |-------|-------|-----------|
-| professor.spec.js | 7 | Registro, login, crear/cerrar encuestas, resultados, logout |
+| professor.spec.js | 8 | Registro, login, crear/cerrar encuestas, resultados, logout |
 | student.spec.js | 7 | Registro, login, código inválido, unirse, votar, voto duplicado |
 | security-roles.spec.js | 6 | Rutas protegidas, aislamiento de roles, logout |
 

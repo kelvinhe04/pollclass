@@ -669,14 +669,14 @@ io.on('connection', (socket) => {
 
 ### 12.1 Resumen
 
-La aplicación incluye **19 tests automatizados** end-to-end que verifican los flujos principales de usuario y validaciones de seguridad.
+La aplicación incluye **21 tests automatizados** end-to-end que verifican los flujos principales de usuario y validaciones de seguridad.
 
 ### 12.2 Estructura de Tests
 
 ```
 tests/
 ├── fixtures.js              # Helpers reutilizables
-├── professor.spec.js       # 7 tests - flujo profesor
+├── professor.spec.js       # 8 tests - flujo profesor
 ├── student.spec.js          # 7 tests - flujo estudiante
 └── security-roles.spec.js  # 6 tests - seguridad y roles
 ```
@@ -685,7 +685,7 @@ tests/
 
 | Suite | Tests | Flujos |
 |-------|-------|--------|
-| professor.spec.js | 7 | Registro, login, crear/cerrar encuestas, eliminar, resultados, logout |
+| professor.spec.js | 8 | Registro, login, crear/cerrar encuestas, eliminar, resultados, logout |
 | student.spec.js | 7 | Registro, login, código inválido, unirse, votar, resultados, voto duplicado |
 | security-roles.spec.js | 6 | Rutas protegidas, aislamiento de roles, logout |
 
