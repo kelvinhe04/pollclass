@@ -379,55 +379,50 @@ Inicia:
 ## 15. Testing E2E con Playwright
 
 ### Resumen
-Se implementaron tests automatizados end-to-end usando **Playwright de Microsoft** para automatizar navegación, capturar screenshots y grabar videos.
+Se implementaron **18 tests automatizados** end-to-end usando **Playwright** para verificar los flujos principales de la aplicación PollClass.
 
-### Instalación
+### Primera Configuración
 ```bash
-npm install -D @playwright/test
+# Instalar dependencias
+bun install
+
+# Instalar navegador Chromium (una sola vez)
+bun run setup:e2e
 ```
 
 ### Archivos de Test (`/tests/`)
 
-| # | Archivo | Descripción |
-|---|----------|------------|
-| 01 | `01-registro-profesor.spec.js` | Login profesor |
-| 02 | `02-crear-encuesta.spec.js` | Crear poll |
-| 03 | `03-registro-estudiante.spec.js` | Login estudiante |
-| 04 | `04-votar.spec.js` | Unirse y votar |
-| - | `config.js` | Datos compartidos |
-| - | `pollCode.js` | Código del poll |
-
-### Configuración (`playwright.config.js`)
-```javascript
-module.exports = defineConfig({
-  testDir: './tests',
-  timeout: 30000,
-  use: {
-    headless: false,    // Navegador visible
-    slowMo: 1000,     // Delay entre acciones
-    video: 'on',      // Grabar video
-  },
-});
-```
-
-### Datos de Prueba
-- Profesor: `profesor@pollclass.com` / `test123`
-- Estudiante: `estudiante@pollclass.com` / `test123`
-- Poll: "Encuesta Automatizada"
-
-### Resultados (4/4 PASANDO)
-| Test | Estado | Duración |
-|------|--------|---------|
-| Login Profesor | ✅ PASS | 1.8s |
-| Crear Encuesta | ✅ PASS | 2.4s |
-| Login Estudiante | ✅ PASS | 2.2s |
-| Votar | ✅ PASS | 4.3s |
+| Archivo | Tests | Descripción |
+|---------|-------|-------------|
+| `fixtures.js` | - | Helpers reutilizables |
+| `professor.spec.js` | 6 | Flujo completo profesor |
+| `student.spec.js` | 6 | Flujo estudiante |
+| `security-roles.spec.js` | 6 | Seguridad y roles |
 
 ### Ejecutar Tests
 ```bash
-npx playwright test
+# Todos los tests
+bun run test:e2e
+
+# Navegador visible
+bun run test:e2e:headed
+
+# Interfaz gráfica
+bun run test:e2e:ui
+
+# Ver reporte HTML
+bun run test:e2e:report
 ```
 
-### Archivos Generados
-- `/screenshots/` - 32 imágenes
-- `/videos/pollclass-e2e.webm` - Video del test
+### Resultados (18/18 PASANDO)
+| Suite | Tests | Estado |
+|-------|-------|--------|
+| professor.spec.js | 6 | ✅ PASS |
+| student.spec.js | 6 | ✅ PASS |
+| security-roles.spec.js | 6 | ✅ PASS |
+| **Total** | **18** | **100%** |
+
+### Configuración (`playwright.config.js`)
+La configuración actual usa webServer para iniciar automáticamente backend y frontend durante los tests.
+
+**Nota:** Las carpetas `playwright-report/` y `test-results/` se generan automáticamente y están ignoradas en `.gitignore`.

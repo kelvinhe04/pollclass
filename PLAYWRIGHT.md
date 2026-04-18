@@ -162,10 +162,10 @@ jobs:
 
 ```bash
 # Instalar dependencias del proyecto
-npm install
+bun install
 
-# Instalar navegador de Playwright
-npx playwright install chromium
+# Instalar navegador de Playwright (una sola vez)
+bun run setup:e2e
 ```
 
 ### 5.2 Ejecutar Tests
@@ -194,16 +194,16 @@ bun x playwright test tests/professor.spec.js
 bun x playwright test --trace on
 
 # Ejecutar solo tests de profesor
-npx playwright test tests/professor.spec.js
+bun x playwright test tests/professor.spec.js
 
 # Ejecutar solo tests de estudiante
-npx playwright test tests/student.spec.js
+bun x playwright test tests/student.spec.js
 
 # Ejecutar solo tests de seguridad
-npx playwright test tests/security-roles.spec.js
+bun x playwright test tests/security-roles.spec.js
 
 # Generar código de test con recorder
-npx playwright codegen http://localhost:5173
+bun x playwright codegen http://localhost:5173
 ```
 
 ## 6. Requisitos Previos
@@ -257,5 +257,5 @@ lsof -ti:5173 | xargs kill -9
 
 ### Ver trace después de un fallo
 ```bash
-npx playwright show-report playwright-report/trace.zip
+bun x playwright show-report playwright-report/trace.zip
 ```

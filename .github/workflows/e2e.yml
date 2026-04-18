@@ -27,26 +27,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: '20'
-          cache: 'npm'
+          bun-version: latest
 
       - name: Install root dependencies
-        run: npm ci
+        run: bun install
 
       - name: Install server dependencies
-        run: cd server && npm ci
+        run: cd server && bun install
 
       - name: Install client dependencies
-        run: cd client && npm ci
+        run: cd client && bun install
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: bun x playwright install --with-deps chromium
 
       - name: Run E2E tests
-        run: npx playwright test
+        run: bun run test:e2e
         env:
           CI: 'true'
           MONGODB_URI: 'mongodb://localhost:27017/pollclass'
