@@ -143,9 +143,9 @@ bun x playwright test tests/security-roles.spec.js
 | Suite | Tests | Descripción |
 |-------|-------|-------------|
 | professor.spec.js | 7 | Flujo completo profesor |
-| student.spec.js | 6 | Flujo estudiante |
+| student.spec.js | 7 | Flujo estudiante + voto duplicado |
 | security-roles.spec.js | 6 | Validaciones de seguridad |
-| **Total** | **19** | **100% coverage** |
+| **Total** | **20** | **100% coverage** |
 
 ---
 

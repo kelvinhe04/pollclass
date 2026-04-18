@@ -10,7 +10,7 @@ Se implementaron pruebas automatizadas end-to-end (E2E) usando **Playwright de M
 tests/
 ├── fixtures.js             # Helpers reutilizables
 ├── professor.spec.js       # Tests del flujo de profesor (7 tests)
-├── student.spec.js         # Tests del flujo de estudiante (6 tests)
+├── student.spec.js         # Tests del flujo de estudiante (7 tests)
 └── security-roles.spec.js # Tests de seguridad y roles (6 tests)
 ```
 
@@ -235,9 +235,9 @@ net start MongoDB
 | Suite | Tests | Estado Esperado |
 |-------|-------|-----------------|
 | professor.spec.js | 7 | ✅ Todos pasando |
-| student.spec.js | 6 | ✅ Todos pasando |
+| student.spec.js | 7 | ✅ Todos pasando |
 | security-roles.spec.js | 6 | ✅ Todos pasando |
-| **Total** | **19** | **100% passing** |
+| **Total** | **20** | **100% passing** |
 
 ## 8. Notas Importantes
 

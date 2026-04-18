@@ -422,7 +422,7 @@ La aplicación incluye **18 tests automatizados** end-to-end que verifican los f
 | Suite | Tests | Cobertura |
 |-------|-------|-----------|
 | professor.spec.js | 7 | Registro, login, crear/cerrar encuestas, resultados, logout |
-| student.spec.js | 6 | Registro, login, código inválido, unirse, votar |
+| student.spec.js | 7 | Registro, login, código inválido, unirse, votar, voto duplicado |
 | security-roles.spec.js | 6 | Rutas protegidas, aislamiento de roles, logout |
 
 ### 12.2 Ejecutar Tests (con Bun)
