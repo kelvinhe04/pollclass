@@ -23,8 +23,9 @@ tests/
 | 02 | Error login | Credenciales incorrectas |
 | 03 | Crear encuesta | Crear nueva encuesta |
 | 04 | Cerrar encuesta | Cerrar encuesta activa |
-| 05 | Interfaz de eliminaci\u00f3n | Verificar bot\u00f3n eliminar disponible |
+| 05 | Interfaz de eliminación | Verificar botón eliminar disponible |
 | 06 | Ver resultados | Ver resultados de encuesta |
+| 07 | Cerrar sesión | Logout de profesor |
 
 #### Estudiante (student.spec.js) - 6 tests
 | # | Test | Descripción |
@@ -184,6 +185,11 @@ bun run setup:e2e
 # Ejecutar todos los tests (con Bun)
 bun run test:e2e
 
+# Ejecutar suites específicas
+bun run test:professor   # Solo tests de profesor (7)
+bun run test:student    # Solo tests de estudiante (6)
+bun run test:security   # Solo tests de seguridad (6)
+
 # Ejecutar en modo headed (navegador visible)
 bun run test:e2e:headed
 
@@ -197,20 +203,16 @@ bun run test:e2e:report
 ### 5.3 Opciones Adicionales
 
 ```bash
+# Ejecutar suites específicas
+bun run test:professor   # Solo tests de profesor
+bun run test:student    # Solo tests de estudiante
+bun run test:security   # Solo tests de seguridad
+
 # Ejecutar un test específico
 bun x playwright test tests/professor.spec.js
 
 # Ejecutar con trace viewer (para depuración)
 bun x playwright test --trace on
-
-# Ejecutar solo tests de profesor
-bun x playwright test tests/professor.spec.js
-
-# Ejecutar solo tests de estudiante
-bun x playwright test tests/student.spec.js
-
-# Ejecutar solo tests de seguridad
-bun x playwright test tests/security-roles.spec.js
 
 # Generar código de test con recorder
 bun x playwright codegen http://localhost:5173
@@ -232,10 +234,10 @@ net start MongoDB
 
 | Suite | Tests | Estado Esperado |
 |-------|-------|-----------------|
-| professor.spec.js | 6 | ✅ Todos pasando |
+| professor.spec.js | 7 | ✅ Todos pasando |
 | student.spec.js | 6 | ✅ Todos pasando |
 | security-roles.spec.js | 6 | ✅ Todos pasando |
-| **Total** | **18** | **100% passing** |
+| **Total** | **19** | **100% passing** |
 
 ## 8. Notas Importantes
 

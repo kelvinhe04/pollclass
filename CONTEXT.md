@@ -36,7 +36,7 @@ pollclass/
 ├── AGENTS.md                    # Bitácora agéntica del laboratorio
 ├── package.json                  # Scripts: bun run dev / bun run test:e2e
 ├── playwright.config.js         # Configuración de Playwright
-├── tests/                       # Tests E2E (18 tests)
+├── tests/                       # Tests E2E (19 tests)
 │   ├── fixtures.js              # Helpers reutilizables
 │   ├── professor.spec.js       # 6 tests - flujo profesor
 │   ├── student.spec.js          # 6 tests - flujo estudiante
@@ -379,7 +379,7 @@ Inicia:
 ## 15. Testing E2E con Playwright
 
 ### Resumen
-Se implementaron **18 tests automatizados** end-to-end usando **Playwright** para verificar los flujos principales de la aplicación PollClass.
+Se implementaron **19 tests automatizados** end-to-end usando **Playwright** para verificar los flujos principales de la aplicación PollClass.
 
 ### Primera Configuración
 ```bash
@@ -420,7 +420,7 @@ bun run test:e2e:report
 | professor.spec.js | 6 | ✅ PASS |
 | student.spec.js | 6 | ✅ PASS |
 | security-roles.spec.js | 6 | ✅ PASS |
-| **Total** | **18** | **100%** |
+| **Total** | **19** | **100%** |
 
 ### Configuración (`playwright.config.js`)
 La configuración actual usa webServer para iniciar automáticamente backend y frontend durante los tests.

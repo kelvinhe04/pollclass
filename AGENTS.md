@@ -56,7 +56,10 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
   - `loginProfessor()` - Login de profesor
   - `loginStudent()` - Login de estudiante
   - `createPoll()` - Crear encuesta
+  - `closePoll()` - Cerrar encuesta
+  - `deletePoll()` - Eliminar encuesta
   - `joinPollWithCode()` - Unirse con código
+  - `logout()` - Cerrar sesión
 
 #### 3. tests/professor.spec.js
 - 6 tests con assertions robustas
@@ -110,8 +113,13 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
 # PRIMERA VEZ - Instalar navegador Chromium
 bun run setup:e2e
 
-# Ejecutar todos los tests
+# Ejecutar todos los tests (19 tests)
 bun run test:e2e
+
+# Ejecutar suites específicas
+bun run test:professor   # 7 tests - flujo profesor
+bun run test:student   # 6 tests - flujo estudiante
+bun run test:security  # 6 tests - seguridad y roles
 
 # Modo headed (navegador visible)
 bun run test:e2e:headed
@@ -122,7 +130,7 @@ bun run test:e2e:ui
 # Ver reporte HTML
 bun run test:e2e:report
 
-# Ejecutar suite específica
+# Ejecutar suite específica manualmente
 bun x playwright test tests/professor.spec.js
 bun x playwright test tests/student.spec.js
 bun x playwright test tests/security-roles.spec.js
@@ -134,19 +142,20 @@ bun x playwright test tests/security-roles.spec.js
 
 | Suite | Tests | Descripción |
 |-------|-------|-------------|
-| professor.spec.js | 6 | Flujo completo profesor |
+| professor.spec.js | 7 | Flujo completo profesor |
 | student.spec.js | 6 | Flujo estudiante |
 | security-roles.spec.js | 6 | Validaciones de seguridad |
-| **Total** | **18** | **100% coverage** |
+| **Total** | **19** | **100% coverage** |
 
 ---
 
 ## Notas para Próximas Entregas
 
-1. **Fixtures** - El archivo `tests/fixtures.js` puede expandirse con más helpers según crezcan los tests
-2. **Page Objects** - Para proyectos más grandes, considerar Page Object Model
-3. **Datos de prueba** - Los emails se generan dinámicamente para evitar colisiones
-4. **CI/CD** - GitHub Actions ya está configurado en `.github/workflows/e2e.yml`
+1. **Scripts** - Disponibles: test:e2e, test:professor, test:student, test:security, test:e2e:headed, test:e2e:ui, test:e2e:report
+2. **Fixtures** - El archivo tests/fixtures.js puede expandirse con más helpers
+3. **Page Objects** - Para proyectos más grandes, considerar Page Object Model
+4. **Datos de prueba** - Los emails se generan dinámicamente para evitar colisiones
+5. **CI/CD** - GitHub Actions ya está configurado en .github/workflows/e2e.yml
 
 ---
 
@@ -181,8 +190,9 @@ Se realizaron correcciones importantes:
 - Se eliminaron assertions débiles que usaban condiciones OR
 - Se fortalecieron validaciones para asegurar comportamiento real
 - Se ajustaron locators para hacerlos más estables
-- Se mejoró el caso negativo de voto duplicado
-- Se revisaron flujos para evitar falsos positivos
+- Se agregaron helpers adicionales: closePoll, deletePoll, logout
+- Se agregaron scripts por suite: test:professor, test:student, test:security
+- Se aumentó a 19 tests totales
 
 Esto fue necesario porque algunas pruebas generadas por el agente podían pasar sin validar correctamente el resultado.
 
@@ -193,8 +203,8 @@ La validación se realizó mediante:
 bun run test:e2e
 ```
 
-Resultado: **18 tests pasando** (100%)
+Resultado: **19 tests pasando** (100%)
 
 ---
 
-*Laboratorio 5 completado: 18 tests E2E implementados con assertions robustas, helpers reutilizables y documentación completa.*
+*Laboratorio 5 completado: 19 tests E2E implementados con assertions robustas, helpers reutilizables, scripts por suite y documentación completa.*

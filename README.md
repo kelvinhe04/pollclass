@@ -421,7 +421,7 @@ La aplicación incluye **18 tests automatizados** end-to-end que verifican los f
 
 | Suite | Tests | Cobertura |
 |-------|-------|-----------|
-| professor.spec.js | 6 | Registro, login, crear/cerrar encuestas, resultados |
+| professor.spec.js | 7 | Registro, login, crear/cerrar encuestas, resultados, logout |
 | student.spec.js | 6 | Registro, login, código inválido, unirse, votar |
 | security-roles.spec.js | 6 | Rutas protegidas, aislamiento de roles, logout |
 
@@ -433,6 +433,11 @@ bun run setup:e2e
 
 # Todos los tests (headless - sin navegador)
 bun run test:e2e
+
+# Ejecutar suites específicas
+bun run test:professor   # 7 tests - flujo profesor
+bun run test:student    # 6 tests - flujo estudiante
+bun run test:security   # 6 tests - seguridad y roles
 
 # Con navegador visible
 bun run test:e2e:headed
