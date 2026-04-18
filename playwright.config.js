@@ -39,7 +39,7 @@ module.exports = defineConfig({
       }
     },
     {
-      command: 'cd client && npm run dev',
+      command: 'cd client && bun run dev',
       port: 5173,
       timeout: 120000,
       stdout: 'pipe',
