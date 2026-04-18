@@ -38,24 +38,24 @@ jobs:
           bun --version
 
       - name: Install root dependencies
-        run: bun install --verbose
+        run: npm install
 
       - name: Install server dependencies
-        run: cd server && bun install --verbose
+        run: cd server && npm install
 
       - name: Install client dependencies
-        run: cd client && bun install --verbose
+        run: cd client && npm install
 
       - name: Install Playwright browsers
         run: |
           echo "Installing Playwright..."
-          bun x playwright install --with-deps chromium
+          npx playwright install --with-deps chromium
           echo "Playwright installed"
 
       - name: Run E2E tests
         run: |
           echo "Running E2E tests..."
-          bun run test:e2e 2>&1 || echo "Tests failed with exit code $?"
+          npx playwright test
         env:
           CI: 'true'
           MONGODB_URI: 'mongodb://localhost:27017/pollclass'
