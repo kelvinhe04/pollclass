@@ -67,7 +67,7 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
 - Validación real de cierre, eliminación y logout
 
 #### 4. tests/student.spec.js
-- 6 tests (incluye verificación de códigos)
+- 7 tests (incluye verificación de códigos + caso negativo)
 - Assertions robustas sin OR
 - Validación real de comportamiento esperado
 
