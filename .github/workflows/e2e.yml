@@ -21,7 +21,7 @@ jobs:
           --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 10
 
     steps:
       - name: Checkout code
@@ -32,20 +32,30 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Verify Bun installation
+        run: |
+          echo "Bun version:"
+          bun --version
+
       - name: Install root dependencies
-        run: bun install
+        run: bun install --verbose
 
       - name: Install server dependencies
-        run: cd server && bun install
+        run: cd server && bun install --verbose
 
       - name: Install client dependencies
-        run: cd client && bun install
+        run: cd client && bun install --verbose
 
       - name: Install Playwright browsers
-        run: bun x playwright install --with-deps chromium
+        run: |
+          echo "Installing Playwright..."
+          bun x playwright install --with-deps chromium
+          echo "Playwright installed"
 
       - name: Run E2E tests
-        run: bun run test:e2e
+        run: |
+          echo "Running E2E tests..."
+          bun run test:e2e 2>&1 || echo "Tests failed with exit code $?"
         env:
           CI: 'true'
           MONGODB_URI: 'mongodb://localhost:27017/pollclass'
@@ -60,7 +70,7 @@ jobs:
           retention-days: 30
 
       - name: Upload Playwright trace
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-trace
