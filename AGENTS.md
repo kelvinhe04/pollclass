@@ -62,9 +62,9 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
   - `logout()` - Cerrar sesión
 
 #### 3. tests/professor.spec.js
-- 6 tests con assertions robustas
+- 7 tests con assertions robustas
 - Usa helpers de fixtures
-- Validación real de cierre y eliminación
+- Validación real de cierre, eliminación y logout
 
 #### 4. tests/student.spec.js
 - 6 tests (incluye verificación de códigos)
