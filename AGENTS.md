@@ -20,7 +20,7 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
 ### Problemas Identificados
 | Problema | Severidad | Impacto |
 |----------|-----------|---------|
-| Sin script npm para ejecutar tests | Alta | Dificulta ejecución |
+| Sin script Bun para ejecutar tests | Alta | Dificulta ejecución |
 | Assertions frágiles (usan OR) | Alta | Tests pasan falsamente |
 | Caso negativo débil | Media | No valida voto duplicado |
 | Sin helpers/fixtures reutilizables | Media | Código duplicado |
@@ -41,10 +41,11 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
 
 #### 1. package.json
 ```diff
-+ "test:e2e": "playwright test"
-+ "test:e2e:headed": "playwright test --headed"
-+ "test:e2e:ui": "playwright test --ui"
-+ "test:e2e:report": "playwright show-report"
++ "setup:e2e": "bun x playwright install chromium"
++ "test:e2e": "bun run playwright test"
++ "test:e2e:headed": "bun run playwright test --headed"
++ "test:e2e:ui": "bun run playwright test --ui"
++ "test:e2e:report": "bun run playwright show-report"
 ```
 
 #### 2. tests/fixtures.js (NUEVO)
@@ -63,7 +64,7 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
 - Validación real de cierre y eliminación
 
 #### 4. tests/student.spec.js
-- 7 tests (agregado caso negativo de voto duplicado)
+- 6 tests (incluye verificación de códigos)
 - Assertions robustas sin OR
 - Validación real de comportamiento esperado
 
@@ -186,10 +187,10 @@ Esto fue necesario porque algunas pruebas generadas por el agente podían pasar 
 La validación se realizó mediante:
 
 ```bash
-npm run test:e2e
+bun run test:e2e
 ```
 
-Resultado: **18 tests passando** (100%)
+Resultado: **18 tests pasando** (100%)
 
 ---
 
