@@ -107,6 +107,9 @@ Implementar pruebas automatizadas end-to-end (E2E) con Playwright para el proyec
 ## Comandos para Ejecutar (con Bun)
 
 ```bash
+# PRIMERA VEZ - Instalar navegador Chromium
+bun run setup:e2e
+
 # Ejecutar todos los tests
 bun run test:e2e
 
