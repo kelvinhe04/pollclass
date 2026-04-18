@@ -435,8 +435,8 @@ bun run setup:e2e
 bun run test:e2e
 
 # Ejecutar suites específicas
-bun run test:professor   # 7 tests - flujo profesor
-bun run test:student    # 6 tests - flujo estudiante
+bun run test:professor   # 8 tests - flujo profesor
+bun run test:student    # 7 tests - flujo estudiante
 bun run test:security   # 6 tests - seguridad y roles
 
 # Con navegador visible
